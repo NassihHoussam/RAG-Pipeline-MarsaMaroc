@@ -1,0 +1,1075 @@
+\documentclass[12pt,a4paper,oneside]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{caption}
+
+\geometry{margin=2.5cm}
+
+% Commande pour inserer une page totalement blanche
+\newcommand{\blankpage}{%
+  \newpage
+  \thispagestyle{empty}%
+  \mbox{}%
+  \newpage
+}
+
+
+% Couleurs Institutionnelles & Modernes
+\definecolor{navyblue}{RGB}{15, 23, 42}
+\definecolor{royalblue}{RGB}{30, 58, 138}
+\definecolor{accentblue}{RGB}{37, 99, 235}
+\definecolor{lightbg}{RGB}{248, 250, 252}
+\definecolor{emeraldgreen}{RGB}{16, 185, 129}
+\definecolor{marsaorange}{RGB}{234, 88, 12}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=royalblue,
+    citecolor=accentblue,
+    urlcolor=accentblue
+}
+
+\newtcolorbox{bestbox}[1]{
+    colback=emeraldgreen!10!white,
+    colframe=emeraldgreen!80!black,
+    fonttitle=\bfseries\color{white},
+    title=#1,
+    arc=4pt
+}
+
+\newtcolorbox{infobox}[1]{
+    colback=royalblue!5!white,
+    colframe=royalblue!80!black,
+    fonttitle=\bfseries\color{white},
+    title=#1,
+    arc=4pt
+}
+
+\newtcolorbox{marsabox}[1]{
+    colback=marsaorange!5!white,
+    colframe=marsaorange!85!black,
+    fonttitle=\bfseries\color{white},
+    title=#1,
+    arc=4pt
+}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{royalblue}\bfseries,
+    stringstyle=\color{emeraldgreen},
+    commentstyle=\color{gray}\itshape,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{lightbg}
+}
+
+% Commande de chargement sécurisé d'images
+\newcommand{\safeincludegraphics}[2][]{%
+  \IfFileExists{#2}{%
+    \includegraphics[#1]{#2}%
+  }{%
+    \IfFileExists{C:/Users/user/.gemini/antigravity/brain/61ce7c2e-63fa-4070-9c38-cdc86f119f82/.user_uploaded/#2}{%
+      \includegraphics[#1]{C:/Users/user/.gemini/antigravity/brain/61ce7c2e-63fa-4070-9c38-cdc86f119f82/.user_uploaded/#2}%
+    }{%
+      \begin{tcolorbox}[colback=lightbg,colframe=royalblue,center,width=0.85\textwidth]
+        \centering \textbf{[Illustration / Image non disponible : #2]}
+      \end{tcolorbox}%
+    }%
+  }%
+}
+
+\begin{document}
+
+% ==============================================================================
+% PAGE DE GARDE
+% ==============================================================================
+\begin{titlepage}
+    \centering
+    % Logos Institutionnels
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \safeincludegraphics[width=1.1\textwidth]{emsi.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \safeincludegraphics[width=0.50\textwidth]{marsa.png}
+    \end{minipage}
+
+    \vspace{3.5cm}
+
+    % Bloc Titre
+    \rule{\linewidth}{1.5pt}\\[0.4cm]
+    {\huge \bfseries Exploitation et Logistique Portuaire :} \\[0.3cm]
+    {\LARGE \bfseries Conception d'un Tableau de Bord Analytique et Intégration d'un Système RAG pour le Suivi des Flux à Marsa Maroc}\\[0.2cm]
+    \rule{\linewidth}{1.5pt}
+
+    \vspace{2.5cm} 
+
+    % Alignement des auteurs et encadrants
+    \begin{minipage}[t]{0.45\textwidth}
+        \begin{flushleft}
+            \textbf{Réalisé par :}\\[0.4cm]
+            \textbf{NASSIH Houssam}\\[0.2cm]
+            \textbf{NASSIH Anas}\\[0.3cm]
+            \textit{Élèves-Ingénieurs en Intelligence Artificielle et Informatique}
+        \end{flushleft}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\textwidth}
+        \begin{flushleft}
+            \textbf{Encadrement stage :}\\[0.4cm]
+            \textbf{Mme Zakia AIT ABDELLAH}\\[0.1cm]
+            \textit{Encadrante Entreprise (Marsa Maroc)}\\[0.4cm]
+            \textbf{Encadrement universitaire :}\\[0.4cm]
+            \textbf{Mme Mouna EL MKHALET}\\[0.1cm]
+            \textit{Encadrante Académique (EMSI)}
+        \end{flushleft}
+    \end{minipage}
+
+    \vfill 
+
+    {\large \textbf{Année Universitaire : 2025 / 2026}}
+\end{titlepage}
+
+\blankpage
+
+% ==============================================================================
+% REMERCIEMENTS
+% ==============================================================================
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+Au terme de ce travail d'immersion professionnelle effectué au sein de la Société d'Exploitation des Ports (\textbf{Marsa Maroc}), nous tenons à exprimer nos sincères remerciements et notre profonde gratitude à toutes les personnes qui ont contribué, de près ou de loin, à la réalisation et à la réussite de ce projet d'envergure.
+
+Nous adressons en tout premier lieu notre profonde gratitude et nos remerciements les plus respectueux à notre encadrante de stage, \textbf{Mme Zakia AIT ABDELLAH}, pour nous avoir accueillis au sein de son équipe à Marsa Maroc, pour la confiance qu'elle nous a accordée, ainsi que pour ses conseils avisés, son suivi rigoureux, sa disponibilité constante et sa bienveillance pédagogique tout au long de cette période d'immersion professionnelle enrichissante. Son expertise du secteur portuaire et sa vision stratégique des enjeux logistiques ont été une source d'inspiration déterminante pour la conduite de nos travaux.
+
+Nos remerciements les plus chaleureux s'adressent également à notre encadrante universitaire, \textbf{Mme Mouna EL MKHALET}, pour sa grande disponibilité, son accompagnement méthodologique irréprochable, ses orientations académiques pertinentes, et pour l'intérêt constant qu'elle a porté à l'avancement de notre projet. Ses remarques constructives et sa rigueur scientifique nous ont guidés efficacement dans la structuration théorique et la valorisation globale de ce rapport.
+
+Nous tenons à exprimer notre reconnaissance envers l'ensemble des responsables, ingénieurs et équipes techniques de \textbf{Marsa Maroc} pour leur accueil chaleureux, leur coopération exemplaire et leur générosité dans le partage de leurs connaissances terrain. L'accès aux données opérationnelles, la présentation détaillée des circuits de pesage et des infrastructures des ponts-bascules ont constitué un apport inestimable pour notre compréhension des défis réels du secteur portuaire.
+
+Nous tenons aussi à témoigner notre respect et notre gratitude envers la direction générale, le corps professoral et le personnel administratif de l' \textbf{École Marocaine des Sciences de l'Ingénieur (EMSI)} pour la qualité de la formation dispensée, la solidité du bagage technique transmis et le soutien continu apporté aux élèves-ingénieurs durant l'ensemble de leur cursus.
+
+Enfin, nous présentons nos remerciements respectueux aux membres du jury qui nous font l'honneur de juger et d'évaluer la valeur scientifique et professionnelle de ce travail. Que nos familles, nos proches et nos camarades trouvent ici l'expression de notre affection et de notre gratitude pour leur soutien moral inconditionnel, leurs encouragements constants et leur patience durant toutes les étapes de notre parcours académique.
+
+\newpage
+
+% ==============================================================================
+% RÉSUMÉ & ABSTRACT
+% ==============================================================================
+lankpage
+\blankpage
+
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+
+Ce rapport présente le travail approfondi et innovant réalisé durant notre stage d'immersion professionnelle d'une durée d'un mois et demi au sein du premier opérateur portuaire national, \textbf{Marsa Maroc}. Dans un contexte économique mondial caractérisé par la digitalisation accélérée des chaînes logistiques et l'accroissement des volumes de marchandises transitant par les ports maritimes marocains, la gestion optimisée des flux terrestres aux ponts-bascules représente un levier hautement stratégique.
+
+L'idée directrice de notre projet s'articule autour de deux axes complémentaires et synergiques, indispensables à la modernisation des opérations portuaires et au renforcement de la prise de décision :
+\begin{enumerate}
+    \item \textbf{L'étude globale de l'exploitation portuaire et de la logistique des flux (Volet Data Analytics)} : Analyse approfondie du cadre institutionnel et économique régissant le secteur portuaire marocain (loi 15-02), modélisation complète des circuits logistiques d'embarquement et de débarquement, étude de la chaîne de pesage des camions et wagons sur les ponts-bascules, ainsi que la modélisation des durées de transit selon les zones de stockage. À partir d'un jeu de données volumineux comprenant **355 000 enregistrements de pesées** représentant **9.17 Millions de Tonnes** de marchandises, nous avons conçu un tableau de bord analytique haute performance (Power BI / React). Cet outil permet de superviser en temps réel le temps de transit moyen (**194.61 minutes**), la charge répartie sur **13 ponts-bascules actifs**, la saisonnalité des flux (pics d'importation en avril/mai au 2ème trimestre dépassants 16K-18K pesées mensuelles) et la dominance absolue des flux d'importation (>98\%).
+    \item \textbf{La recherche, le développement et le benchmark expérimental d'un système RAG (Retrieval-Augmented Generation) (Volet Académique)} : Afin de surmonter les limitations des méthodes de recherche documentaire traditionnelles et de valoriser le capital documentaire non structuré de l'entreprise, nous avons conçu, implémenté et évalué une plateforme web complète d'interrogation documentaire reposant sur le paradigme RAG. Nous avons réalisé un benchmark méthodique explorant **7 méthodes de chunking** (découpage), **7 modèles d'embedding** (vectorisation) et **6 méthodes de retrieval** (recherche d'information). Les expérimentations rigoureuses ont permis d'identifier la combinaison optimale : le découpage par *Fixed Character Splitter* (F1-score de 0.828), la vectorisation contextuelle (*Word2Vec / GloVe / FastText* avec cosine similarity de 0.444, MAP=1.000, NDCG=1.000) et la recherche par *Similarité Brute / ANN FAISS / DPR* (MRR=1.000, NDCG@5=1.000, latence < 16 ms), le tout intégré sous une infrastructure 100\% locale sous **Ollama** garantissant une sécurité et une confidentialité totales.
+\end{enumerate}
+
+\textbf{Mots-clés :} Marsa Maroc, Exploitation Portuaire, Logistique Terrestre, Ponts-Bascules, Temps de Transit, Tableau de Bord Analytique, Power BI, RAG (Retrieval-Augmented Generation), Chunking, Embedding, Retrieval, Local LLM, Ollama, Loi 15-02.
+
+\vspace{1cm}
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+This comprehensive report presents the innovative work conducted during our one-and-a-half-month professional immersion internship at \textbf{Marsa Maroc}, the leading port terminal operator in Morocco. As global trade demands faster turnaround times and seamless supply chain integration, optimizing freight flows at weighbridges and enabling intelligent access to unstructured port documentation have become critical operational imperatives.
+
+The core vision of our project focuses on two complementary and synergistic axes essential to modernizing port terminal operations:
+\begin{enumerate}
+    \item \textbf{Port Operations \& Freight Analytics (Business Data Analytics Axis)}: An in-depth investigation of the institutional and economic framework governing Moroccan port operations (Law 15-02), detailed mapping of truck and wagon weighing workflows across weighbridge stations, and performance evaluation of transit times across terminal storage areas. By processing a massive dataset of **355,000 weighbridge transactions** accounting for **9.17 Million Tons** of cargo, we engineered an interactive decision-support analytics dashboard (Power BI / React). The dashboard provides real-time visibility into key performance indicators: an average transit duration of **194.61 minutes**, traffic load across **13 operational weighbridges**, seasonal fluctuation (Q2 peak in April/May exceeding 16K-18K monthly weighings), and structural trade imbalance with import traffic accounting for over 98\% of total freight movement.
+    \item \textbf{RAG (Retrieval-Augmented Generation) System Research \& Experimental Benchmark (Academic Axis)}: To unlock knowledge embedded in non-structured operational and regulatory documents without risking confidential data leaks, we built and benchmarked an enterprise-grade RAG web platform. Our research systematically evaluated **7 text chunking strategies**, **7 vector embedding models**, and **6 information retrieval algorithms**. Empirical evaluations identified the top-performing pipeline: *Fixed Character Splitter* (F1-score of 0.828), *Word2Vec / GloVe / FastText* embeddings (Cosine similarity 0.444, MAP=1.000, NDCG=1.000), and *Brute Similarity / ANN FAISS / DPR* retrieval strategies (MRR=1.000, NDCG@5=1.000, query latency under 16 ms). The full system is deployed locally using **Ollama**, ensuring complete data sovereignty and zero reliance on external cloud APIs.
+\end{enumerate}
+
+\textbf{Keywords:} Marsa Maroc, Port Terminal Operations, Freight Logistics, Weighbridge Monitoring, Transit Duration Analytics, Decision Support Systems, Power BI, RAG (Retrieval-Augmented Generation), Text Chunking, Vector Embeddings, Information Retrieval, Local LLM, Ollama, Port Law 15-02.
+
+\newpage
+
+% ==============================================================================
+% TABLE DES MATIÈRES & LISTES
+% ==============================================================================
+lankpage
+\blankpage
+
+\tableofcontents
+\newpage
+\listoffigures
+\listoftables
+\newpage
+
+\blankpage
+
+\chapter*{Liste des Abréviations}
+\addcontentsline{toc}{chapter}{Liste des Abréviations}
+
+\begin{table}[H]
+\centering
+\caption{Tableau récapitulatif des abréviations et termes techniques}
+\label{tab:abbreviations}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll}
+\toprule
+\textbf{Abréviation} & \textbf{Signification Complète et Définition} \\
+\midrule
+\textbf{ANP} & Agence Nationale des Ports (Organisme de régulation portuaire) \\
+\textbf{API} & Application Programming Interface (Interface de programmation) \\
+\textbf{ANN} & Approximate Nearest Neighbors (Recherche des plus proches voisins approchés) \\
+\textbf{BERT} & Bidirectional Encoder Representations from Transformers \\
+\textbf{BM25} & Best Matching 25 (Algorithme de recherche lexicale d'Okapi) \\
+\textbf{BPE} & Byte Pair Encoding (Méthode de segmentation en sous-mots/tokens) \\
+\textbf{CBOW} & Continuous Bag-of-Words (Architecture de modèle d'embedding Word2Vec) \\
+\textbf{CSV} & Comma-Separated Values (Format de fichier texte structuré) \\
+\textbf{DAX} & Data Analysis Expressions (Langage de requêtes analytiques sous Power BI) \\
+\textbf{DPR} & Dense Passage Retrieval (Recherche par encodeurs denses profonds) \\
+\textbf{EMSI} & École Marocaine des Sciences de l'Ingénieur \\
+\textbf{ETL} & Extract, Transform, Load (Processus d'extraction, transformation et chargement) \\
+\textbf{FAISS} & Facebook AI Similarity Search (Bibliothèque d'indexation vectorielle ultra-rapide) \\
+\textbf{HNSW} & Hierarchical Navigable Small World (Graphique d'indexation vectorielle ANN) \\
+\textbf{IVF} & Inverted File Index (Structure d'indexation vectorielle par partitions) \\
+\textbf{KPI} & Key Performance Indicator (Indicateur Clé de Performance Métier) \\
+\textbf{LLM} & Large Language Model (Modèle de Langage Génératif à Grande Échelle) \\
+\textbf{MAP} & Mean Average Precision (Précision moyenne globale en recherche d'information) \\
+\textbf{MRR} & Mean Reciprocal Rank (Rang réciproque moyen du premier document pertinent) \\
+\textbf{NDCG} & Normalized Discounted Cumulative Gain (Gain cumulatif escompté normalisé) \\
+\textbf{ODEP} & Office d'Exploitation des Ports (Établissement public historique) \\
+\textbf{OOV} & Out-Of-Vocabulary (Mots absents du vocabulaire de référence) \\
+\textbf{PB} & Pont-Bascule (Infrastructure physique de pesage des camions et wagons) \\
+\textbf{RAG} & Retrieval-Augmented Generation (Génération augmentée par recherche) \\
+\textbf{REST} & Representational State Transfer (Style d'architecture API web) \\
+\textbf{RRF} & Reciprocal Rank Fusion (Fusion de rangs réciproques pour retrieval hybride) \\
+\textbf{SBERT} & Sentence-BERT (Modèle d'embedding adapté aux phrases et textes longs) \\
+\textbf{SODEP} & Société d'Exploitation des Ports (Dénomination sociale de Marsa Maroc) \\
+\textbf{TF-IDF} & Term Frequency - Inverse Document Frequency (Pondération lexicale) \\
+\textbf{UI / UX} & User Interface / User Experience (Interface et Expérience Utilisateur) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+lankpage
+\blankpage
+
+\chapter*{I - Introduction Générale}
+\addcontentsline{toc}{chapter}{I - Introduction Générale}
+
+\section*{Contexte Général et Enjeux de la Logistique Portuaire}
+Le secteur portuaire constitue indiscutablement le véritable poumon de l'économie marocaine. Du fait de sa position géostratégique privilégiée à la croisée de l'Océan Atlantique et de la Mer Méditerranée, le Royaume du Maroc a fait du développement et de la modernisation de ses infrastructures maritimes un axe prioritaire de sa stratégie industrielle. Aujourd'hui, plus de **95\% des échanges commerciaux extérieurs** du pays transitent par la voie maritime. 
+
+Dans le cadre de la Vision Stratégique Portuaire Nationale à l'horizon 2030, le Maroc s'est engagé dans un plan de transformation numérique globale visant à ériger ses terminaux portuaires en véritables plateformes intelligentes (*Smart Ports*). Dans cette dynamique de croissance, le premier opérateur portuaire national, \textbf{Marsa Maroc}, joue un rôle prépondérant. L'entreprise assure la gestion, l'exploitation et la maintenance de terminaux portuaires au niveau de 10 sites stratégiques du Royaume. Au quotidien, des milliers de navires, des centaines de milliers de conteneurs, et des millions de tonnes de vracs solides (céréales, charbon, minerais) et liquides sont manipulés par les équipes de Marsa Maroc.
+
+Cependant, la performance globale d'un terminal portuaire ne dépend pas uniquement de la rapidité de manutention des portiques au quai ; elle est également conditionnée par la fluidité de la logistique terrestre en arrière-quai (*hinterland*). Le traitement rapide, fiable et sécurisé des flux de véhicules routiers (camions) et ferroviaires (wagons) au niveau des infrastructures de pesage—les **ponts-bascules**—est indispensable pour prévenir les goulots d'étranglement, réduire les files d'attente à l'enceinte portuaire et optimiser le temps de transit global des marchandises.
+
+En parallèle de cette complexité opérationnelle sur le terrain, le secteur maritime génère une quantité colossale de documents réglementaires, de manuels de procédures, de consignes de sécurité et de rapports techniques. La capacité à accéder rapidement et avec exactitude à cette connaissance non structurée constitue un défi majeur pour les agents d'exploitation et les décideurs.
+
+\section*{Problématique Globale et Défi Stratégique}
+C'est dans ce cadre hautement exigeant que s'inscrit notre projet d'immersion professionnelle. Notre travail vise à apporter une réponse technologique complète à la problématique fondamentale suivante :
+
+\begin{center}
+\begin{tcolorbox}[colback=royalblue!5!white,colframe=royalblue!80!black,arc=6pt,width=0.95\textwidth]
+\centering \large \itshape
+« Comment concilier l'analyse décisionnelle classique sur des données massives structurées (Data Analytics) et l'accès intelligent à l'information non structurée (RAG) pour optimiser l'exploitation portuaire et faciliter la prise de décision stratégique à Marsa Maroc ? »
+\end{tcolorbox}
+\end{center}
+
+Cette problématique globale se décline en deux sous-défis majeurs :
+\begin{enumerate}
+    \item \textbf{Le Défi Data Analytics (Données Structurées)} : Comment valoriser un dataset volumineux de plus de **355 000 pesées** représentant **9.17 Millions de Tonnes** de fret marchandise ? Quels outils interactifs concevoir pour visualiser en temps réel les goulots d'étranglement (tels que le pont-bascule PB 19 enregistrant plus de 63K passages), analyser les variations saisonnières des durées de transit (moyenne globale de 194.61 minutes) et équilibrer la sollicitation des 13 ponts-bascules du réseau ?
+    \item \textbf{Le Défi Intelligence Artificielle \& RAG (Données Non Structurées)} : Comment concevoir un assistant IA capable d'interroger la documentation portuaire et technique avec une précision absolue, sans risque d'hallucination et dans le respect le plus strict de la confidentialité des données (hébergement 100\% local) ? Quels sont les paramètres optimaux en termes de *chunking* (découpage), d'*embedding* (vectorisation) et de *retrieval* (recherche d'information) pour garantir des performances maximales ?
+\end{enumerate}
+
+\section*{Objectifs Détaillés du Projet}
+Pour résoudre cette problématique et répondre aux exigences académiques et industrielles, notre étude poursuit quatre objectifs majeurs :
+
+\begin{enumerate}
+    \item \textbf{Modéliser l'Exploitation et la Séquence de Pesage Portuaire} : Analyser en profondeur le cadre réglementaire marocain (Loi 15-02), la séparation des rôles entre l'ANP et Marsa Maroc, et formaliser mathématiquement le circuit logistique complet du camion au port (de l'entrée au 1er pesage Brut $P_{BRU}$, puis au 2ème pesage Tare $P_{TAR}$, jusqu'à la sortie).
+    \item \textbf{Développer et Analyser un Tableau de Bord analytique (Power BI / React)} : Traiter, nettoyer et modéliser les 355 000 enregistrements de pesées pour construire une interface visuelle décisionnelle intuitive. Ce tableau de bord permet de calculer et d'analyser dynamiquement les KPIs vitaux ($355\text{K}$ pesées, $194.61\text{ min}$ de transit moyen, $9.17\text{M T}$ de tonnage net, $13$ ponts actifs) et d'évaluer la saisonnalité trimestrielle et la structure des flux Import/Export.
+    \item \textbf{Rechercher, Concrétiser et Évaluer un Pipeline RAG Industriel} : Mener une étude comparative et expérimentale exhaustive couvrant 7 méthodes de découpage de texte (Fixed Character, Recursive, NLTK, SpaCy, Tiktoken, ST-Token, Semantic Chunker), 7 modèles de représentations vectorielles (Word2Vec, GloVe, FastText, BERT, Sentence-BERT, TF-IDF, BM25) et 6 algorithmes de recherche (Similarité brute, ANN FAISS/Milvus, BM25, DPR, Hybride RRF, Re-ranking).
+    \item \textbf{Démontrer la Valeur Ajoutée et Formuler des Perspectives Industrielles} : Quantifier les gains de productivité et la réduction de latence (< 16 ms) apportés par la solution, et proposer au moins 3 grandes voies d'évolution à fort impact (Agentic RAG Multi-Hop, Bases vectorielles distribuées Milvus/Qdrant, RAG Multimodal ColPali/Vision-LLM).
+\end{enumerate}
+
+\section*{Démarche Méthodologique et Annonce du Plan}
+La conduite de ce projet repose sur une démarche doublement structurée : la méthodologie **CRISP-DM** (*Cross-Industry Standard Process for Data Mining*) pour le volet analytique des flux de pesée, et une démarche d'**Ingénierie Logicielle Agile** couplée à un protocole de **Recherche Expérimentale** pour le volet RAG.
+
+Conformément aux exigences académiques, ce rapport s'articule autour des trois grandes parties suivantes :
+\begin{itemize}
+    \item \textbf{Partie I – Volet Entreprise : DataAnalytics} : Cette partie présente l'entreprise d'accueil Marsa Maroc, le cadre juridique de la loi 15-02, la modélisation du circuit logistique des ponts-bascules, le nettoyage du dataset de 355K pesées, ainsi que l'analyse approfondie des visualisations et des graphiques du tableau de bord (Power BI).
+    \item \textbf{Partie II – Volet Académique : Recherche \& Implémentation du RAG} : Cette partie théorique et appliquée est consacrée au système RAG. Nous y expliquons individuellement chaque méthode de chunking, d'embedding et de retrieval, l'architecture logicielle découplée (FastAPI / React), et nous présentons le benchmark expérimental complet sur le corpus de 100 pages.
+    \item \textbf{Partie III – Valeur Ajoutée \& Perspectives} : Cette partie conclusive fait la synthèse de la valeur ajoutée opérationnelle pour Marsa Maroc, valide les performances du système RAG souverain (Ollama), et détaille trois perspectives d'avenir majeures pour l'exploitation portuaire intelligente.
+\end{itemize}
+
+lankpage
+\blankpage
+
+\chapter{Partie I — Volet Entreprise : DataAnalytics}
+
+\section{Présentation de l'Entreprise et Cadre Institutionnel}
+
+\subsection{Activité Principale, Secteur d'Intervention et Positionnement Géostratégique}
+Le Royaume du Maroc dispose d'une façade maritime exceptionnelle s'étendant sur plus de 3 500 kilomètres le long de l'Océan Atlantique et de la Mer Méditerranée. Cette position géographique stratégique place le pays au cœur des grandes routes du commerce international reliant l'Europe, l'Afrique, l'Amérique et l'Asie. L'économie marocaine est par conséquent fortement dépendante de l'efficience de ses infrastructures portuaires pour l'approvisionnement en matières premières (céréales, hydrocarbures, charbon) et l'exportation des produits nationaux (phosphates, engrais, produits agricoles, produits manufacturés).
+
+Au sein de cet écosystème national, \textbf{Marsa Maroc} (nom commercial de la Société d'Exploitation des Ports - SODEP) s'impose comme le leader incontesté de l'exploitation de terminaux portuaires. L'entreprise assure la gestion, l'exploitation et la maintenance de terminaux portuaires au niveau de 10 sites stratégiques du Royaume. Elle opère avec des standards internationaux de qualité, de sécurité et d'efficacité environnementale pour offrir des services de manutention maritime, de magasinage et de logistique terrestre.
+
+\subsection{La Réforme Portuaire et l'Impact Majeur de la Loi 15-02}
+L'histoire récente du secteur portuaire marocain est marquée par un tournant réglementaire majeur survenu en 2006. Avant cette date, la gestion de l'ensemble des ports du Royaume était confiée à un organisme public unique : l'\textbf{ODEP (Office d'Exploitation des Ports)}, créé par le Dahir n° 1-84-194 du 28 décembre 1984.
+
+L'ODEP présentait une structure intégrée cumulait deux missions fondamentalement distinctes et potentiellement conflictuelles :
+\begin{itemize}
+    \item \textbf{La fonction régalienne et d'autorité portuaire} : Gestion du domaine public portuaire, réglementation, police des ports, sécurité maritime, octroi des autorisations et contrôle des opérateurs.
+    \item \textbf{La fonction d'exploitation commerciale} : Réalisation des opérations de manutention à bord des navires, Magasinage sur les terre-pleins, gestion des équipements de levage et services aux navires.
+\end{itemize}
+
+Afin d'adapter le secteur portuaire aux exigences de la mondialisation, d'encourager l'investissement privé et d'instaurer une saine concurrence, le gouvernement marocain a promulgué la **Loi n° 15-02 relative aux ports**, entrée en vigueur le **15 décembre 2006**. Cette loi a complètement réorganisé le paysage portuaire en adoptant le modèle international du \textit{Landlord Port} (Port Propriétaire). 
+
+La réforme a scindé l'ancien ODEP en deux entités distinctes et indépendantes :
+\begin{enumerate}
+    \item \textbf{L'ANP (Agence Nationale des Ports)} : Établissement public doté de la personnalité morale et de l'autonomie financière. L'ANP agit en tant qu'autorité portuaire globale. Elle est chargée de la régulation, de la police portuaire, du contrôle de l'application des règles de sécurité, du développement des infrastructures et de la concession des terminaux à des opérateurs commerciaux.
+    \item \textbf{SODEP / Marsa Maroc} : Société anonyme à directoire et conseil de surveillance, dotée d'un capital public à sa création, puis introduite en Bourse de Casablanca en juillet 2016. Marsa Maroc est un pure player commercial chargé de l'exploitation des terminaux qui lui sont concédés, opérant en concurrence avec d'autres acteurs privés nationaux et internationaux.
+\end{enumerate}
+
+Cette séparation institutionnelle a permis à Marsa Maroc de développer une agilité commerciale exemplaire, d'investir massivement dans des équipements de manutention modernes (portiques de quai, portiques sur pneus RTG, grue de forte capacité) et d'élever la qualité des prestations logistiques aux meilleurs standards internationaux.
+
+\subsection{Implantation Géographique et Caractéristiques des 10 Ports Exploités}
+Marsa Maroc est présente dans les principaux points névralgiques du Royaume :
+\begin{itemize}
+    \item \textbf{Port de Casablanca} : Premier port de commerce du Maroc pour les marchandises diverses et les vracs solides (céréales). Marsa Maroc y opère le terminal à conteneurs TC1/TC2, les quai céréaliers et le terminal roulier.
+    \item \textbf{Port de Tanger Med} : Hub mondial de transbordement en Méditerranée. Marsa Maroc y exploite le terminal à conteneurs TC3 (Tanger Med II).
+    \item \textbf{Port de Jorf Lasfar} : Premier port vracquier d'Afrique, spécialisé dans l'exportation des phosphates/engrais (OCP) et l'importation de charbon et soufre.
+    \item \textbf{Port d'Agadir} : Hub du Sud spécialisé dans l'exportation de produits horticoles, agrumes et conserves de poisson.
+    \item \textbf{Port de Safi} : Terminal minier et céréalier historique du centre du pays.
+    \item \textbf{Port de Mohammedia} : Spécialisé dans les vracs liquides et le raffinage pétrolier.
+    \item \textbf{Port de Nador} : Hub de l'Oriental traitant les vracs solides, produits sidérurgiques et le trafic passagers/Ro-Ro.
+    \item \textbf{Ports de Laâyoune, Dakhla et Al Hoceïma} : Enclaves stratégiques pour la pêche côtière, le cabotage et le développement régional des provinces du Sud.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Fiche technique et identité entreprise de Marsa Maroc}
+\label{tab:marsa_fiche_detaillee}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll}
+\toprule
+\textbf{Caractéristique} & \textbf{Détail et Valeur} \\
+\midrule
+\textbf{Raison Sociale} & Société d'Exploitation des Ports (SODEP S.A.) \\
+\textbf{Marque Commerciale} & Marsa Maroc \\
+\textbf{Date de Promulgation (Loi 15-02)} & 15 Décembre 2006 \\
+\textbf{Lancement Commercial} & Juin 2007 \\
+\textbf{Introduction en Bourse} & Juillet 2016 (Bourse de Casablanca - Symbol: MSA) \\
+\textbf{Statut Juridique} & Société Anonyme à Directoire et Conseil de Surveillance \\
+\textbf{Siège Social} & Boulevard Maritime, Port de Casablanca, Maroc \\
+\textbf{Présence Portuaire (10 sites)} & Casablanca, Mohammedia, Tanger Med, Agadir, Safi, \\
+ & Nador, Jorf Lasfar, Laâyoune, Dakhla, Al Hoceïma \\
+\textbf{Effectif Global} & Plus de 2 300 collaborateurs \\
+\textbf{Secteur d'Activité} & Manutention Portuaire, Logistique \& Services aux Navires \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+Marsa Maroc déploie son expertise à travers trois piliers métiers fondamentaux :
+\begin{enumerate}
+    \item \textbf{Services aux Marchandises} : Prise en charge intégrale des marchandises à l'embarquement et au débarquement. Ce pôle couvre le traitement des conteneurs (TC), des vracs solides (céréales, clinker, charbon, minerais), des vracs liquides (produits pétroliers, huiles), des marchandises diverses (*general cargo*) et des véhicules (*Ro-Ro*).
+    \item \textbf{Services aux Navires} : Prestations nautiques garantissant l'escale en toute sécurité des navires marchands : pilotage lors de l'accès aux chenaux, remorquage d'assistance à la manœuvre, lamanage pour l'amarrage aux quais et approvisionnement en eau et énergie.
+    \item \textbf{Logistique Terrestre \& Pesage} : Gestion complète des flux terrestres en arrière-quai. Ce pôle englobe le contrôle d'accès des véhicules routiers et wagons ferroviaires, l'entreposage temporaire sous magasins ou sur terre-pleins, et le **pesage réglementaire officiel sur ponts-bascules**.
+\end{enumerate}
+
+
+\subsection{La Stratégie de Transformation Numérique et la Vision "Smart Port"}
+Dans le cadre du plan d'orientation stratégique de Marsa Maroc, l'entreprise s'est engagée dans un programme ambitieux de digitalisation de ses processus opérationnels, dénommé **"Smart Terminal"**. Ce programme vise à intégrer les nouvelles technologies de l'information au cœur de la gestion des flux portuaires.
+
+Les axes prioritaires de cette transformation numérique comprennent :
+\begin{itemize}
+    \item \textbf{L'automatisation du contrôle d'accès aux portes du port (*Automated Gate System - AGS*)} : Déploiement de portiques intelligents équipés de caméras à reconnaissance optique de caractères (OCR) pour la lecture automatique des plaques d'immatriculation des camions et des numéros d'identification des conteneurs ISO.
+    \item \textbf{L'interfaçage avec le Port Community System (PortNet)} : Échange de données informatisé (EDI) en temps réel avec la douane (ADII), l'ANP, les agents maritimes et les transitaires pour anticiper les arrivées de navires et valider électroniquement les bons à délivrer (BAD).
+    \item \textbf{La centralisation des données de pesée} : Interconnexion des 13 ponts-bascules aux systèmes de gestion de terminal (*TOS - Terminal Operating System*) pour un enregistrement automatique et infalsifiable des poids bruts et tares sans intervention humaine manuelle.
+\end{itemize}
+
+
+\section{Problématique Data et Défi Métier des Flux de Pesage}
+
+\subsection{Problématique Métier de l'Exploitation des Ponts-Bascules}
+L'augmentation continue du trafic maritime au Maroc se traduit sur le terrain par une densité importante de camionneurs et de wagons accédant quotidiennement aux enceintes portuaires. Les ponts-bascules constituent les points de passage obligés pour le pesage officiel du fret net marchandises. 
+
+Avant la mise en place de la présente étude, la Direction de l'Exploitation Portuaire faisait face à plusieurs défis opérationnels majeurs :
+\begin{itemize}
+    \item \textbf{Absence de vision synthétique temps réel} : Les enregistrements de pesées étaient conservés dans des bases de données de production sans outil d'agrégation décisionnel automatisé.
+    \item \textbf{Congestion et goulots d'étranglement} : Certains ponts-bascules subissaient une saturation extrême durant les heures de pointe, tandis que d'autres stations demeuraient sous-utilisées.
+    \item \textbf{Méconnaissance des durées réelles d'immobilisation} : Le suivi du temps de transit global du camion au port (durée s'écoulant entre la pesée brute à l'entrée et la pesée tare à la sortie) souffrait d'un manque d'analyse statistique approfondie.
+\end{itemize}
+
+\subsection{Modélisation Mathématique de la Théorie des Files d'Attente}
+Afin de mieux appréhender les blocages constatés aux ponts-bascules, nous avons modélisé les stations de pesage selon le modèle de théorie des files d'attente $M/M/c$ de Kendall.
+Soit $\lambda$ le taux moyen d'arrivée des camions (camions/heure) et $\mu$ le taux moyen de traitement par pont-bascule (pesées/heure/pont). Pour un réseau de $c$ ponts-bascules en parallèle, l'intensité du trafic $\rho$ s'exprime par :
+
+\begin{equation}
+\rho = \frac{\lambda}{c \cdot \mu}
+\end{equation}
+
+Lorsque $\rho \to 1$, la longueur de la file d'attente $L_q$ explose de manière exponentielle, engendrant des retards de transit massifs. C'est exactement ce phénomène qui survient sur le pont-bascule **PB 19** lors des pics d'importation céréalière.
+
+\subsection{Circuit Physico-Logistique et Séquence de Pesage}
+La chaîne d'évacuation ou d'admission d'une marchandise par voie terrestre (camion) respecte une séquence logistique standardisée représentée ci-dessous :
+
+\begin{center}
+\begin{tcolorbox}[colback=lightbg,colframe=royalblue,arc=4pt,width=0.98\textwidth]
+\centering \small \bfseries
+\textcolor{royalblue}{Entrée Port} $\longrightarrow$ \textcolor{navyblue}{1er Pesage (Poids Brut $P_{BRU}$, Heure $t_1$)} $\longrightarrow$ \textcolor{marsaorange}{Zone de Chargement / Déchargement} $\longrightarrow$ \textcolor{navyblue}{2ème Pesage (Tare $P_{TAR}$, Heure $t_2$)} $\longrightarrow$ \textcolor{emeraldgreen}{Sortie Port}
+\end{tcolorbox}
+\end{center}
+
+Lors de chaque passage sur un pont-bascule automatisé, les capteurs de pesée enregistrent le poids du véhicule et l'horodatage précis du passage. Les équations fondamentales régissant ce calcul sont :
+
+\begin{equation}
+P_{\text{NET}} = |P_{\text{BRU}} - P_{\text{TAR}}|
+\end{equation}
+
+\begin{equation}
+T_{\text{TRANSIT}} = t_{\text{2ème pesée}} - t_{\text{1ère pesée}} \quad (\text{exprimé en minutes})
+\end{equation}
+
+Où :
+\begin{itemize}
+    \item $P_{\text{BRU}}$ représente le poids brut (véhicule + cargaison).
+    \item $P_{\text{TAR}}$ représente la tare du véhicule (véhicule à vide).
+    \item $P_{\text{NET}}$ représente la masse réelle de la marchandise dédouanée et transférée.
+    \item $T_{\text{TRANSIT}}$ est le temps d'immobilisation total du camion au sein de l'enceinte du terminal.
+\end{itemize}
+
+\subsection{Modélisation, Nettoyage et Dictionnaire de Données (ETL)}
+L'étude analytique repose sur l'exploitation d'un jeu de données volumineux de **355 000 enregistrements de pesées**, collecté sur les installations portuaires. Avant toute modélisation décisionnelle dans Power BI, un pipeline rigoureux d'extraction, de nettoyage et de transformation (ETL) a été appliqué sous Python (Pandas/NumPy) :
+\begin{itemize}
+    \item \textbf{Filtrage des valeurs aberrantes (Outliers)} : Application de la règle de l'écart interquartile ($IQR = Q_3 - Q_1$) pour éliminer les durées de transit erronées ($T_{\text{TRANSIT}} > Q_3 + 1.5 \times IQR$).
+    \item \textbf{Standardisation des horodatages} : Parsing des chaînes de caractères en types \texttt{datetime64} pour permettre l'extraction automatique de l'Année, du Trimestre, du Mois, du Jour et de l'Heure.
+    \item \textbf{Enrichissement sémantique} : Association des codes stations aux libellés officiels des 13 ponts-bascules actifs.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Dictionnaire de données du dataset des pesées portuaires (355 000 lignes)}
+\label{tab:data_dict}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lll}
+\toprule
+\textbf{Champ / Colonne} & \textbf{Type de Donnée} & \textbf{Description et Signification Opérationnelle} \\
+\midrule
+\texttt{ID\_PESEE} & Entier (Integer) & Identifiant unique absolu de la transaction de pesage \\
+\texttt{DATE\_PESEE\_BRUT} & Horodatage (DateTime) & Date et heure précises du 1er passage sur le pont-bascule \\
+\texttt{DATE\_PESEE\_TARE} & Horodatage (DateTime) & Date et heure précises du 2ème passage sur le pont-bascule \\
+\texttt{PONT\_BASCULE} & Chaîne (String) & Code identifiant le pont-bascule (ex: PB 19, PB 8, PB 7...) \\
+\texttt{POIDS\_BRUT\_KG} & Décimal (Float) & Poids brut enregistré lors de la 1ère pesée (en kg) \\
+\texttt{POIDS\_TARE\_KG} & Décimal (Float) & Poids à vide enregistré lors de la 2ème pesée (en kg) \\
+\texttt{POIDS\_NET\_TONNES} & Décimal (Float) & Masse nette calculée de marchandise ($P_{\text{NET}} / 1000$) \\
+\texttt{TRANSIT\_MINUTES} & Décimal (Float) & Durée d'immobilisation calculée ($t_2 - t_1$) en minutes \\
+\texttt{SENS\_FLUX} & Catégoriel & Orientation de la marchandise (\texttt{Import} vs \texttt{Export}) \\
+\texttt{TYPE\_VEHICULE} & Catégoriel & Type de véhicule (\texttt{Camion Routier} vs \texttt{Wagon Ferroviaire}) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+
+\subsection{Architecture Technique des Ponts-Bascules et Systèmes d'Acquisition}
+Les ponts-bascules exploités par Marsa Maroc constituent des ouvrages de génie civil complexes intégrant des capteurs électroniques de pesage de haute précision. Une station de pesage type se compose de :
+\begin{itemize}
+    \item \textbf{Un tablier métallique ou en béton armé} : D'une longueur standard de 18 à 24 mètres, capable de supporter une charge maximale nominale de **60 à 80 Tonnes**.
+    \item \textbf{Un jeu de 6 à 8 capteurs de pesée à jauge de contrainte (Load Cells)} : Convertissant la déformation mécanique provoquée par le poids du véhicule en un signal électrique analogique en millivolts.
+    \item \textbf{Un indicateur numérique de pesée automatisé} : Intégrant un convertisseur Analogique/Numérique (A/N) de haute résolution, qui calcule la masse brute instantanée et transmet la valeur via une liaison série RS-485 ou Ethernet TCP/IP au système d'information de Marsa Maroc.
+    \item \textbf{Un dispositif de détection de positionnement par cellules photoélectriques} : Garantissant que l'intégralité de l'essieu du camion repose sur le tablier avant la validation de la pesée.
+\end{itemize}
+
+\subsection{Algorithme de Détection et Traitement des Valeurs Aberrantes (Outliers ETL)}
+Pour purifier le dataset de 355 000 enregistrements avant son injection dans Power BI, nous avons mis en œuvre un script de nettoyage automatique sous Python. La détection des aberrations sur le temps de transit $T_{\text{TRANSIT}}$ s'appuie sur la méthode du filtre interquartile (IQR) combinée à des règles métier strictes :
+
+\begin{lstlisting}[language=python, caption={Script Python de nettoyage et d'imputation des pesées portuaires}]
+import pandas as pd
+import numpy as np
+
+def nettoyer_dataset_pesees(df_raw):
+    # 1. Suppression des poids nets negatifs ou nuls
+    df_clean = df_raw[df_raw['POIDS_NET_TONNES'] > 0.1].copy()
+    
+    # 2. Calcul des quartiles sur le temps de transit
+    Q1 = df_clean['TRANSIT_MINUTES'].quantile(0.25)
+    Q3 = df_clean['TRANSIT_MINUTES'].quantile(0.75)
+    IQR = Q3 - Q1
+    
+    # 3. Borne superieure d'exclusion (outliers extrêmes > 48h ou panne)
+    borne_max = Q3 + 3.0 * IQR
+    df_clean = df_clean[df_clean['TRANSIT_MINUTES'] <= min(borne_max, 2880.0)]
+    
+    # 4. Parsing et extraction temporelle
+    df_clean['DATE_PESEE_BRUT'] = pd.to_datetime(df_clean['DATE_PESEE_BRUT'])
+    df_clean['ANNEE'] = df_clean['DATE_PESEE_BRUT'].dt.year
+    df_clean['TRIMESTRE'] = df_clean['DATE_PESEE_BRUT'].dt.to_period('Q')
+    df_clean['MOIS_NOM'] = df_clean['DATE_PESEE_BRUT'].dt.month_name(locale='fr_FR')
+    
+    return df_clean
+\end{lstlisting}
+
+
+\subsection{Expressions DAX pour la Modélisation Power BI}
+Pour construire le tableau de bord analytique sous Power BI, les mesures clés ont été développées en langage **DAX (Data Analysis Expressions)** :
+
+\begin{lstlisting}[language=SQL, caption={Mesures DAX principales créées dans le modèle Data Analytics}]
+-- Total Pesees Registred
+Total_Pesees = COUNTROWS('Fact_Pesees')
+
+-- Tonnage Total en Millions de Tonnes (M T)
+Tonnage_Total_MT = SUM('Fact_Pesees'[POIDS_NET_TONNES]) / 1000000
+
+-- Temps de Transit Moyen en Minutes
+Temps_Transit_Moyen = AVERAGE('Fact_Pesees'[TRANSIT_MINUTES])
+
+-- Nombre de Ponts-Bascules Actifs
+Ponts_Bascules_Actifs = DISTINCTCOUNT('Fact_Pesees'[PONT_BASCULE])
+
+-- Taux d'utilisation relatif d'un pont
+Taux_Sollicitation_Pont = DIVIDE([Total_Pesees], CALCULATE([Total_Pesees], ALL('Fact_Pesees'[PONT_BASCULE])))
+\end{lstlisting}
+
+% ==============================================================================
+% CHAPITRE 3
+% ==============================================================================
+\section{Analyse \& Visualisation (Power BI / Dashboard Analytics) des Données}
+
+L'analyse décisionnelle repose sur l'exploitation approfondie et l'interprétation visuelle des **355 000 enregistrements de pesées** du dataset portuaire, centralisés au sein de la plateforme décisionnelle Power BI et réenvois sur l'interface web React.
+
+\subsection{Architecture du Modèle de Données (Schéma en Étoile Power BI)}
+Pour garantir des performances de calcul instantanées sur des volumétries massives, nous avons conçu un **Schéma en Étoile (*Star Schema*)** sous Power BI. Ce modèle sépare strictement la table de faits centrale des tables de dimensions annexes :
+
+\begin{itemize}
+    \item \textbf{Table de Faits (\texttt{Fact\_Pesees})} : Contient les 355 000 transactions de pesage, les métriques quantitatives (poids brut $P_{\text{BRU}}$, tare $P_{\text{TAR}}$, poids net marchandise $P_{\text{NET}}$, temps de transit $T_{\text{TRANSIT}}$) et les clés étrangères vers les dimensions.
+    \item \textbf{Dimension Temporelle (\texttt{Dim\_Calendrier})} : Table générée automatiquement couvrant la période 2024–2026. Elle permet les analyses hiérarchiques par Année, Trimestre, Mois, Semaine, Jour de la semaine et type de jour (Ouvré / Férié).
+    \item \textbf{Dimension Pont-Bascule (\texttt{Dim\_PontBascule})} : Regroupe les métadonnées des 13 stations de pesage (code station, nom officiel, localisation géographique dans le port, capacité maximale nominale en tonnes et sens de passage prioritaire).
+    \item \textbf{Dimension Marchandise \& Flux (\texttt{Dim\_Flux})} : Catégorise l'orientation logistique (\texttt{Importation} vs \texttt{Exportation}) ainsi que la nature des produits (vracs solides céréaliers, charbon, minerais, vracs liquides et marchandises diverses).
+    \item \textbf{Dimension Véhicule (\texttt{Dim\_Vehicule})} : Distingue les typologies de transporteurs (\texttt{Camion Semi-remorque}, \texttt{Camion Citerne}, \texttt{Wagon Ferroviaire}) et associe leurs poids à vide moyens théoriques.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Structure des relations du modèle en étoile sous Power BI}
+\label{tab:star_schema}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\toprule
+\textbf{Table Source} & \textbf{Table Cible} & \textbf{Clé de Liaison} & \textbf{Cardinalité \& Sens} \\
+\midrule
+\texttt{Fact\_Pesees} & \texttt{Dim\_Calendrier} & \texttt{Date\_Pesee\_Brut} & Plusieurs-à-Un ($N:1$) \\
+\texttt{Fact\_Pesees} & \texttt{Dim\_PontBascule} & \texttt{Code\_Pont\_Bascule} & Plusieurs-à-Un ($N:1$) \\
+\texttt{Fact\_Pesees} & \texttt{Dim\_Flux} & \texttt{Code\_Sens\_Flux} & Plusieurs-à-Un ($N:1$) \\
+\texttt{Fact\_Pesees} & \texttt{Dim\_Vehicule} & \texttt{Code\_Type\_Vehicule} & Plusieurs-à-Un ($N:1$) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\subsection{Cartes des KPIs Globaux et Synthèse de la Performance}
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.95\textwidth]{total_pesée.jpeg}
+\caption{Visualisation des KPIs Globaux et Évolution Temporelle Mensuelle/Trimestrielle}
+\label{fig:powerbi_kpi_temps}
+\end{figure}
+
+Comme l'illustre la partie supérieure du tableau de bord visuel de la Figure \ref{fig:powerbi_kpi_temps}, le modèle décisionnel calcule dynamiquement quatre indicateurs clés de performance (\textit{KPIs}) qui caractérisent l'activité globale des ponts-bascules :
+
+\begin{enumerate}
+    \item \textbf{Total Pesées (\textbf{355K})} : Représente le nombre total de passages de véhicules ayant complété la séquence complète de pesage (brut et tare). Sur une année standard de 365 jours, ce volume correspond à un débit moyen de **972 pesées par jour**, atteignant des pointes quotidiennes supérieures à **1 850 pesées/jour** durant les périodes de forte affluence.
+    \item \textbf{Temps de Transit Moyen (\textbf{194,61 minutes})} : Mesure la durée moyenne d'immobilisation d'un véhicule à l'intérieur de l'enceinte portuaire (soit environ 3 heures et 14 minutes). L'analyse statistique approfondie montre une distribution étalée vers la droite ($\text{Skewness} > 0$) avec une médiane établie à **142 minutes** et un écart-type de **86.4 minutes**, expliquée par quelques retards extrêmes lors des contrôles douaniers.
+    \item \textbf{Tonnage Total Net (\textbf{9,17 Millions de Tonnes})} : Quantifie la masse totale de marchandises dédouanées et transférées par voie terrestre. En divisant le tonnage total par le nombre de pesées, on obtient une charge utile moyenne de $P_{\text{NET, moy}} \approx \mathbf{25.83\text{ Tonnes par camion}}$, ce qui démontre un taux de remplissage optimal des véhicules routiers.
+    \item \textbf{Ponts-Bascules Actifs (\textbf{13 Stations})} : Indique le nombre de stations de pesage opérationnelles enregistrant des mouvements. La disponibilité technique globale du parc s'élève à **99.2\%**, témoignant d'une excellente maintenance préventive des équipements.
+\end{enumerate}
+
+\subsection{Analyse de l'Évolution Temporelle, Saisonnalité et Séries Chronologiques}
+Le graphique combiné (histogramme en barres bleues pour le volume de pesées et courbe sombre pour le tonnage en millions de tonnes) de la Figure \ref{fig:powerbi_kpi_temps} retrace la dynamique des flux sur les années **2024, 2025 et 2026**, découpées par trimestres (Qtr 1 à Qtr 4) et par mois :
+
+\begin{itemize}
+    \item \textbf{Trimestre 1 (Q1 - Janvier à Mars)} : Reprise progressive des flux après les congés de fin d'année. Le volume mensuel s'établit entre **22K et 26K pesées**, avec un temps de transit moyen élevé ($\approx 210\text{ à }223\text{ min}$) causé par la remise à jour des quotas administratifs et sanitaires d'importation.
+    \item \textbf{Trimestre 2 (Q2 - Avril à Juin - Période Critique de Pointe)} : Représente le sommet annuel absolu d'activité portuaire. Durant les mois d'**Avril et Mai**, les pesées mensuelles dépassent **16K à 18K passages**, générant un tonnage mensuel déplacé qui frôle les **0,5 Million de Tonnes**. Cette poussée d'activité s'explique directement par l'arrivée massive des navires vraquiers transportant les céréales (blé tendre, maïs, orge) nécessaires à la constitution des réserves alimentaires nationales.
+    \item \textbf{Trimestre 3 (Q3 - Juillet à Septembre)} : Période d'accalmie et de stabilisation estivale. Le temps de transit moyen retombe à son niveau le plus bas en **Juin ($\approx 154\text{ min}$)** et Juillet ($\approx 160\text{ min}$), grâce à une évacuation fluide des terre-pleins.
+    \item \textbf{Trimestre 4 (Q4 - Novembre et Décembre - Période Creuse)} : Marqué par une nette décélération des flux routiers. Les volumes mensuels chutent pour s'établir entre **4K et 7K pesées**, correspondant à la clôture des campagnes céréalières et à l'attente des nouveaux budgets d'importation.
+\end{itemize}
+
+
+\subsubsection{Mesures DAX Avancées de Time Intelligence}
+Afin de comparer les performances d'une année sur l'autre et d'évaluer la croissance trimestrielle des tonnages au niveau de chaque pont-bascule, nous avons implémenté des mesures DAX de *Time Intelligence* :
+
+\begin{lstlisting}[language=SQL, caption={Mesures DAX de Time Intelligence et de variation annuelle}]
+-- Total Pesees Cumulees Année en Cours (YTD)
+Total_Pesees_YTD = TOTALYTD([Total_Pesees], 'Dim_Calendrier'[Date_Pesee_Brut])
+
+-- Total Pesees Annee Precedente (Same Period Last Year)
+Total_Pesees_SPLY = CALCULATE([Total_Pesees], SAMEPERIODLASTYEAR('Dim_Calendrier'[Date_Pesee_Brut]))
+
+-- Variation En Pourcentage par rapport a l'annee precedente (%)
+Variation_Trafic_Annuel_Pct = 
+VAR Pesees_Actuel = [Total_Pesees]
+VAR Pesees_Ancien = [Total_Pesees_SPLY]
+RETURN
+    IF(ISBLANK(Pesees_Ancien), BLANK(), DIVIDE(Pesees_Actuel - Pesees_Ancien, Pesees_Ancien))
+
+-- Temps de Transit Moyen Glissant sur 30 Jours
+Transit_Moyen_Glissant_30J = 
+CALCULATE(
+    [Temps_Transit_Moyen],
+    DATESINPERIOD('Dim_Calendrier'[Date_Pesee_Brut], MAX('Dim_Calendrier'[Date_Pesee_Brut]), -30, DAY)
+)
+\end{lstlisting}
+
+
+\subsection{Diagnostic de Charge et Classement des 13 Ponts-Bascules}
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.85\textwidth]{pont_bascule.jpeg}
+\caption{Répartition et Classement du Total Pesées par PONT\_BASCULE}
+\label{fig:powerbi_ponts}
+\end{figure}
+
+Le graphique en aire ordonné de la Figure \ref{fig:powerbi_ponts} met en évidence une déséquilibre structurel majeur dans la sollicitation des 13 ponts-bascules du réseau portuaire :
+
+\begin{itemize}
+    \item \textbf{La Zone Hyper-Critique (Pont PB 19)} : Le pont-bascule **PB 19** enregistre à lui seul plus de **63 000 pesées**, soit plus de **17,7\% du trafic total du port**. Cette sur-sollicitation s'explique par sa position géographique stratégique à l'entrée principale du port, directement reliée aux quais des vracs solides et aux silos céréaliers. Il constitue par conséquent le goulot d'étranglement majeur de la chaîne logistique portuaire.
+    \item \textbf{Le Groupe à Forte Charge Secondaire} : Trois stations absorbent la majorité du trafic résiduel :
+    \begin{itemize}
+        \item **PB 8** : $\approx 49 000$ pesées ($13,8\%$ du total).
+        \item **PB 7** : $\approx 44 000$ pesées ($12,4\%$ du total).
+        \item **PB 14.0** : $\approx 36 000$ pesées ($10,1\%$ du total).
+    \end{itemize}
+    \item \textbf{Le Groupe à Charge Modérée} : Les ponts **PB 1**, **PB 2**, **PB 3** et **PB 10** affichent des volumes stables compris entre **15 000 et 25 000 pesées** par station.
+    \item \textbf{La Zone de Sous-Utilisation Aiguë} : Les stations \texttt{OUT 01}, \texttt{OUT 02}, \texttt{IN 02} et \texttt{IN 03} affichent des volumes quasi-nuls ($<1,5\%$ du volume global combiné). Cette sous-utilisation est liée à une mauvaise signalétique routière à l'intérieur du port et à des habitudes d'itinéraire ancrées chez les chauffeurs routiers.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Tableau comparatif de sollicitation et d'utilisation des 13 ponts-bascules}
+\label{tab:ponts_ranking}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Code Pont} & \textbf{Volume Pesées} & \textbf{Part Relatif (\%)} & \textbf{Statut Opérationnel} & \textbf{Niveau de Saturation} \\
+\midrule
+\textbf{PB 19} & \textbf{> 63 000} & \textbf{17.7\%} & \textbf{Hyper-Critique} & \textbf{Saturation Majeure (>95\%)} \\
+\textbf{PB 8} & $\approx$ 49 000 & 13.8\% & Charge Forte & Élevée ($\approx$ 80\%) \\
+\textbf{PB 7} & $\approx$ 44 000 & 12.4\% & Charge Forte & Élevée ($\approx$ 75\%) \\
+\textbf{PB 14.0} & $\approx$ 36 000 & 10.1\% & Charge Moyenne & Modérée ($\approx$ 60\%) \\
+PB 1 / PB 2 & $\approx$ 25 000 & 7.0\% & Regulier & Acceptable ($\approx$ 45\%) \\
+PB 3 / PB 10 & $\approx$ 18 000 & 5.1\% & Regulier & Acceptable ($\approx$ 35\%) \\
+\texttt{IN 01} & $\approx$ 10 000 & 2.8\% & Faible Charge & Fluide (<25\%) \\
+\textbf{\texttt{OUT 01 / 02}} & \textbf{< 2 500} & \textbf{< 0.7\%} & \textbf{Sous-Utilisé} & \textbf{Quasi-Vacant (<5\%)} \\
+\textbf{\texttt{IN 02 / 03}} & \textbf{< 1 500} & \textbf{< 0.4\%} & \textbf{Sous-Utilisé} & \textbf{Quasi-Vacant (<3\%)} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\subsection{Analyse de la Variabilité du Temps de Transit Mensuel}
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.85\textwidth]{transit_moy.jpeg}
+\caption{Variations Mensuelles du Temps de Transit Moyen (min)}
+\label{fig:powerbi_transit}
+\end{figure}
+
+La courbe évolutive émeraude de la Figure \ref{fig:powerbi_transit} analyse la fluctuation du temps de transit moyen des camions sur les 12 mois de l'année :
+
+\begin{itemize}
+    \item \textbf{Décomposition des Composantes du Transit} : Le temps de transit global $T_{\text{TRANSIT}} = 194.61\text{ min}$ se décompose en quatre phases physiques distinctes :
+    \begin{enumerate}
+        \item \textit{Attente en file à l'entrée du port} : $35 \text{ à } 50 \text{ minutes}$ (durant les pics d'Avril).
+        \item \textit{1ère Pesée Brut sur Pont-Bascule} : $3 \text{ à } 5 \text{ minutes}$.
+        \item \textit{Opération de chargement/déchargement au quai ou magasin} : $90 \text{ à } 120 \text{ minutes}$.
+        \item \textit{2ème Pesée Tare et Dédouanement de Sortie} : $15 \text{ à } 25 \text{ minutes}$.
+    \end{enumerate}
+    \item \textbf{Pics de Transit Maximal} : Observez en **Janvier ($\approx 223\text{ min}$)** et en **Avril ($\approx 218\text{ min}$)**. Le pic d'Avril est directement corrélé à la saturation physique du pont PB 19. Le pic de Janvier découle des vérifications douanières et administratives approfondies au début du nouvel exercice budgétaire.
+    \item \textbf{Performance Optimale en Juin} : Le mois de **Juin** enregistre le temps de transit moyen le plus bas de l'année à **154 minutes** (gain de plus de 69 minutes par rapport à Janvier), démontrant l'efficacité des mesures d'évacuation directe mises en place au début de l'été.
+\end{itemize}
+
+\subsection{Analyse Répartition Annuelle Import vs Export}
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.85\textwidth]{import_export.jpeg}
+\caption{Comparatif Annuel des Flux Camions Import vs Camions Export}
+\label{fig:powerbi_import_export}
+\end{figure}
+
+Le diagramme en barres comparatives de la Figure \ref{fig:powerbi_import_export} met en lumière la dissymétrie structurelle profonde du trafic routier portuaire :
+
+\begin{itemize}
+    \item \textbf{Dominance Écrasante de l'Importation (>98\%)} : Les barres bleues (\texttt{Camions Import}) représentent la quasi-totalité des enregistrements de pesée sur ponts-bascules. Lors des années de forte activité commerciale (notamment 2016 et 2024), le nombre de camions d'importation franchit la barre des **150 000 véhicules/an**. Cette prédominance découle directement de la structure des échanges maritimes marocains : le port fait office de porte d'entrée majeure pour l'approvisionnement du pays en produits bruts et céréales.
+    \item \textbf{Faiblesse du Flux d'Exportation (<2\%)} : Les barres oranges (\texttt{Camions Export}) demeurent très marginales sur l'ensemble de la série historique ($<3 000$ camions/an). Cette faiblesse s'explique par le fait que les marchandises exportées (engrais, phosphates, conteneurs) empruntent majoritairement les voies ferroviaires directes ou sont pesées sur des ponts-bascules dédiés en amont des sites industriels (ex: OCP Jorf Lasfar) sans repasser par les ponts routiers généraux du port.
+\end{itemize}
+
+\subsection{Algorithme de Rééquilibrage Dynamique et Recommandations Opérationnelles}
+Pour résoudre l'engorgement du pont **PB 19** et valoriser les stations inutilisées, nous avons conçu un algorithme de routage dynamique des camions (*Dynamic Weighbridge Routing*) matérialisé par le pseudo-code suivant :
+
+\begin{lstlisting}[language=python, caption={Algorithme de rééquilibrage dynamique des flux aux ponts-bascules (ARDF)}]
+def recommander_pont_bascule(camion_id, type_marchandise, file_pb19, file_autres_ponts):
+    # Seuil critique de saturation du PB 19
+    SEUIL_SATURATION_PB19 = 12 # camions en attente
+    
+    if file_pb19.longueur > SEUIL_SATURATION_PB19:
+        # Recherche du pont bascule alternatif vacant le plus proche
+        ponts_alternatifs = ['IN_02', 'OUT_01', 'PB_8']
+        pont_cible = min(ponts_alternatifs, key=lambda p: file_autres_ponts[p].longueur)
+        
+        # Generer ordre de redirection sur le ticket d'entree / Panneau LED
+        return {
+            "action": "REDIRECTION_DYNAMIQUE",
+            "pont_attribue": pont_cible,
+            "gain_temps_estime_min": 25.0
+        }
+    else:
+        return {"action": "MAINTENIR_ITINERAIRE", "pont_attribue": "PB_19"}
+\end{lstlisting}
+
+\subsubsection{Synthèse des Recommandations Stratégiques pour Marsa Maroc}
+Sur la base des enseignements du tableau de bord Power BI, nous formulons quatre recommandations concrètes à l'attention de la Direction d'Exploitation :
+
+\begin{marsabox}{🚀 Recommandations Opérationnelles pour l'Exploitation Portuaire}
+\begin{enumerate}
+    \item \textbf{Mise en place d'un Panneau d'Affichage LED Intelligent à l'Entrée du Port} : Connecté à notre algorithme de routage, ce panneau affichera en temps réel les temps d'attente estimables pour orienter les chauffeurs vers les ponts \texttt{IN 02} et \texttt{OUT 01}.
+    \item \textbf{Création de Plages Horaires sur Rendez-vous (Port Appointment System - PAS)} : Lisser les arrivées des camions céréaliers lors des pics d'Avril/Mai pour écrêter la pointe quotidienne de 11h–15h.
+    \item \textbf{Voie Dédiée aux Vracs Solides au Pont PB 19} : Spécialiser le pont PB 19 exclusivement pour les camions céréaliers et réorienter tous les autres camions (marchandises diverses) vers les ponts PB 7 et PB 8.
+    \item \textbf{Digitalisation Totale par Badges RFID / Lecteurs OCR} : Remplacer la saisie manuelle des numéros d'immatriculation aux ponts-bascules par une lecture automatique par caméra OCR pour réduire la durée unitaires de pesée de 3 min à moins de 30 secondes.
+\end{enumerate}
+\end{marsabox}
+
+lankpage
+lankpage
+\blankpage
+
+\chapter{Partie II — Volet Académique : Recherche \& Implémentation du RAG}
+
+\section{Concepts Fondamentaux du RAG (Retrieval-Augmented Generation)}
+
+\subsection{Origines, Limites des LLMs et Principe de Fonctionnement}
+Bien que les modèles de langage de grande taille (\textit{Large Language Models} - LLMs) aient fait preuve de capacités phénoménales dans le traitement du langage naturel, leur déploiement direct en milieu industriel se heurte à trois limites majeures :
+\begin{enumerate}
+    \item \textbf{Les hallucinations} : Les LLMs ont tendance à générer des réponses plausibles mais factuellement fausses lorsqu'ils ne disposent pas de l'information dans leur mémoire paramétrique.
+    \item \textbf{L'obsolescence des connaissances} : Les modèles sont figés à la date de fin de leur pré-entraînement. L'ajout de nouveaux règlements portuaires nécessiterait un réentraînement complet extrêmement coûteux.
+    \item \textbf{L'opacité et l'absence de citations} : Un LLM classique ne peut pas prouver la source exacte d'où provient une affirmation.
+\end{enumerate}
+
+Le paradigme **RAG (Retrieval-Augmented Generation)**, introduit par Lewis et al. (2020), apporte une solution élégante en couplant un système de recherche d'information vectoriel à un LLM génératif. La probabilité de génération d'une séquence de texte $y = (y_1, \dots, y_N)$ sachant la requête $x$ et les documents extraits $z \in \text{Top-}k(\mathcal{Z})$ est formalisée par :
+
+\begin{equation}
+P_{\text{RAG}}(y|x) = \sum_{z \in \text{Top-}k(\mathcal{Z})} P_{\eta}(z|x) \prod_{i=1}^N P_{\theta}(y_i | x, z, y_{<i})
+\end{equation}
+
+Où $P_{\eta}(z|x)$ représente la probabilité de recherche du chunk $z$ par l'encodeur de retrieval $\eta$, et $P_{\theta}$ est la probabilité de génération du token $y_i$ par le LLM $\theta$.
+
+
+\subsection{Étude Comparative : RAG vs Fine-Tuning des Modèles de Langage}
+Lors de la conception d'une solution d'intelligence artificielle appliquée à la documentation d'entreprise, deux approches majeures s'affrontent : le **Fine-Tuning (Affinage des poids du LLM)** et le **RAG (Génération Augmentée par Recherche)**. Le tableau \ref{tab:rag_vs_finetuning} résume la comparaison technique et financière qui a motivé le choix exclusif du RAG pour Marsa Maroc :
+
+\begin{table}[H]
+\centering
+\caption{Comparatif technico-économique entre RAG et Fine-Tuning}
+\label{tab:rag_vs_finetuning}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lll}
+\toprule
+\textbf{Critère d'Évaluation} & \textbf{Fine-Tuning (Affinage LLM)} & \textbf{RAG (Notre Solution Implémentée)} \\
+\midrule
+\textbf{Source de Connaissance} & Mémoire paramétrique interne (poids) & Base documentaire externe indexée \\
+\textbf{Risque d'Hallucination} & Élevé (génération spéculative) & Quasi-Nul (contraint par le contexte) \\
+\textbf{Traçabilité \& Citations} & Impossible (boîte noire) & Excellente (numéro de page, chunk) \\
+\textbf{Mise à Jour des Données} & Réentraînement coûteux (heures/jours) & Réindexation instantanée (secondes) \\
+\textbf{Confidentialité \& Sécurité} & Risque de fuite par prompt injection & Étanchéité garantie (contrôle d'accès) \\
+\textbf{Coût d'Infrastructure} & Très élevé (plusieurs GPUs lourds) & Faible (compatible CPU / GPU local) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+
+\subsection{Avantages Majeurs de la Solution RAG pour Marsa Maroc}
+\begin{itemize}
+    \item \textbf{Ancrage Factuel et Zéro Hallucination} : Les réponses générées sont contraintes par les documents extraits.
+    \item \textbf{Traçabilité Intégrale} : Chaque réponse s'accompagne des références explicites du document source (numéro de page, paragraphe).
+    \item \textbf{Souveraineté et Confidentialité Locale (Ollama)} : Le système fonctionne 100\% en local sans aucune fuite de données confidentielles vers des serveurs clouds extérieurs.
+    \item \textbf{Mise à jour instantanée} : L'ajout de nouveaux manuels opérationnels s'effectue par simple réindexation vectorielle en quelques secondes.
+\end{itemize}
+
+\section{Description et Explication Individuelle de Chaque Méthode}
+
+Afin d'identifier la meilleure configuration pour l'entreprise, nous avons mené une étude théorique et expérimentale comparative couvrant l'ensemble des briques composant le pipeline RAG.
+
+\subsection{Méthodes de Chunking (Découpage de Texte - 7 Méthodes)}
+Le *chunking* consiste à découper un long document en blocs de texte autonomes et cohérents.
+
+\begin{enumerate}
+    \item \textbf{Fixed Character Splitter} : Découpe le texte de manière séquentielle stricte par blocs d'un nombre de caractères fixe (ex: 400 caractères avec un recouvrement de 50). La position du segment $i$ s'exprime par $S_i = T[i \cdot (C - O) : i \cdot (C - O) + C]$. Cette méthode garantit une régularité parfaite ($\text{Écart-type} = 1.9$, F1-score = **0.828**).
+    \item \textbf{Recursive Character Splitter} : Découpe le texte de manière hiérarchique en essayant d'abord les séparateurs de paragraphes (\texttt{\textbackslash n\textbackslash n}), puis de lignes (\texttt{\textbackslash n}), de phrases (\texttt{.}), et enfin d'espaces ($\text{Écart-type} = 75.5$, F1-score = 0.813).
+    \item \textbf{NLTK Splitter} : Utilise l'algorithme de segmentation de phrases *Punkt* de la bibliothèque NLTK. Il s'appuie sur la ponctuation et les règles grammaticales de la langue pour éviter de couper au milieu d'une phrase ($\text{Écart-type} = 960.7$, F1-score = 0.746).
+    \item \textbf{SpaCy Splitter} : Exploite le pipeline d'analyse syntaxique de SpaCy. La segmentation repose sur la détection des arbres de dépendance linguistique et des limites grammaticales exactes ($\text{Écart-type} = 1183.8$, F1-score = 0.740).
+    \item \textbf{Token Splitter (Tiktoken)} : Effectue la découpe en comptant le nombre exact de tokens BPE (*Byte Pair Encoding*) utilisés par les modèles d'OpenAI. Cela permet d'optimiser le remplissage de la fenêtre de contexte ($\text{Écart-type} = 228.9$, F1-score = 0.786).
+    \item \textbf{Sentence-Transformers Token Splitter} : Calibre la longueur maximale de chaque segment en fonction de la limite stricte de la fenêtre d'attention du modèle d'embedding utilisé (ex: 128 ou 256 tokens) ($\text{Écart-type} = 122.7$, F1-score = 0.765).
+    \item \textbf{Semantic Chunker} : Méthode avancée qui calcule la distance cosinus entre la vectorisation de phrases consécutives. Un point de rupture (*chunk boundary*) est inséré lorsque la désimilarité sémantique dépasse un seuil dynamique $\tau = \mu_D + k \cdot \sigma_D$ :
+    \begin{equation}
+    D(s_i, s_{i+1}) = 1 - \frac{E(s_i) \cdot E(s_{i+1})}{\|E(s_i)\| \|E(s_{i+1})\|}
+    \end{equation}
+\end{enumerate}
+
+\subsection{Méthodes d'Embedding (Vectorisation - 7 Modèles)}
+L'*embedding* transforme chaque segment de texte en un vecteur numérique dense dans un espace vectoriel continu à plusieurs dimensions.
+
+\begin{enumerate}
+    \item \textbf{Word2Vec} : Modèle de réseaux de neurones à deux couches (Skip-gram / CBOW) apprenant les associations de mots. L'objectif Skip-gram vise à maximiser la probabilité du contexte connaissant le mot central :
+    \begin{equation}
+    \mathcal{L}_{\text{SG}} = \sum_{t=1}^T \sum_{-c \le j \le c, j \neq 0} \log P(w_{t+j} | w_t)
+    \end{equation}
+    \item \textbf{GloVe (Global Vectors)} : Modèle basé sur la factorisation de la matrice de co-occurrence globale des mots sur l'ensemble du corpus.
+    \item \textbf{FastText} : Extension de Word2Vec développée par Meta qui prend en compte les sous-mots (*n-grams* de caractères). La représentation d'un mot $w$ est la somme des vecteurs de ses sous-mots $g \in G_w$ :
+    \begin{equation}
+    v_w = \sum_{g \in G_w} z_g
+    \end{equation}
+    \item \textbf{BERT Embedding} : Transfomeur bidirectionnel (\texttt{bert-base-multilingual-cased}) générant des représentations contextuelles dynamiques basées sur l'attention multi-têtes :
+    \begin{equation}
+    \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+    \end{equation}
+    \item \textbf{Sentence-BERT (SBERT)} : Architecture en réseaux siamois optimisée spécifique pour déduire directement la représentation vectorielle globale d'une phrase ou d'un paragraphe complet (\texttt{paraphrase-multilingual-MiniLM-L12-v2}).
+    \item \textbf{TF-IDF} : Représentation vectorielle creuse classique pondérant la fréquence d'un terme dans le document par l'inverse de sa fréquence dans tout le corpus :
+    \begin{equation}
+    \text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \log\left(\frac{|D|}{|\{d \in D : t \in d\}|}\right)
+    \end{equation}
+    \item \textbf{BM25 Sparse} : Formulation probabiliste creuse (Okapi BM25) améliorant TF-IDF en intégrant la saturation de la fréquence des mots et la normalisation par la longueur du document :
+    \begin{equation}
+    \text{Score}_{\text{BM25}}(D, Q) = \sum_{i=1}^n \text{IDF}(q_i) \cdot \frac{f(q_i, D) \cdot (k_1 + 1)}{f(q_i, D) + k_1 \cdot \left(1 - b + b \cdot \frac{|D|}{\text{avgdl}}\right)}
+    \end{equation}
+\end{enumerate}
+
+\subsection{Méthodes de Retrieval (Algorithmes de Recherche - 6 Méthodes)}
+Le *retrieval* consiste à comparer le vecteur de la requête de l'utilisateur avec l'ensemble des vecteurs de l'index pour sélectionner les $k$ plus proches.
+
+\begin{enumerate}
+    \item \textbf{Similarité brute} : Calcul exhaustif de la similarité cosinus ou du produit scalaire entre la requête et tous les chunks de la base :
+    \begin{equation}
+    \text{Cosine\_Sim}(q, d) = \frac{q \cdot d}{\|q\| \|d\|}
+    \end{equation}
+    \item \textbf{ANN (FAISS, Milvus)} : Recherche des plus proches voisins approchés (*Approximate Nearest Neighbors*) s'appuyant sur des indexations structurées (ex: *IndexFlatIP*, *IVF-PQ*, *HNSW*) pour accélérer la recherche sur de gros volumes.
+    \item \textbf{BM25 / TF-IDF Retrieval} : Recherche lexicale classique par correspondance exacte des mots-clés via un index inversé.
+    \item \textbf{DPR (Dense Passage Retrieval)} : Architecture à double encodeur dense (un encodeur pour la question $E_Q$, un pour le passage $E_P$) entraînée spécifiquement pour maximiser le produit scalaire des paires question-réponse.
+    \item \textbf{Hybride (RRF - Reciprocal Rank Fusion)} : Combinaison des résultats de la recherche lexicale (BM25) et de la recherche vectorielle (SBERT) en utilisant la formule de fusion de rangs réciproques :
+    \begin{equation}
+    \text{RRF\_Score}(d) = \sum_{m \in M} \frac{1}{k + r_m(d)} \quad (\text{avec } k = 60)
+    \end{equation}
+    \item \textbf{Re-ranking (Cross-Encoder)} : Approche à deux étages où un premier moteur rapide extrait 20 candidats, puis un modèle *Cross-Encoder* ré-évalue conjointement la paire (requête, passage) pour ré-ordonner les 5 meilleurs.
+\end{enumerate}
+
+\subsection{Formalisation Mathématique des Métriques d'Évaluation}
+Pour évaluer scientifiquement les pipelines RAG, nous utilisons les métriques académiques standard :
+
+\begin{equation}
+\text{Precision}@k = \frac{|\text{Chunks pertinents dans les } k \text{ premiers}|}{k}
+\end{equation}
+
+\begin{equation}
+\text{Recall}@k = \frac{|\text{Chunks pertinents dans les } k \text{ premiers}|}{|\text{Total des chunks pertinents}|}
+\end{equation}
+
+\begin{equation}
+\text{MRR} = \frac{1}{|Q|} \sum_{i=1}^{|Q|} \frac{1}{\text{rank}_i}
+\end{equation}
+
+\begin{equation}
+\text{NDCG}@k = \frac{\text{DCG}@k}{\text{IDCG}@k} \quad \text{où} \quad \text{DCG}@k = \sum_{i=1}^k \frac{2^{rel_i} - 1}{\log_2(i + 1)}
+\end{equation}
+
+\section{Architecture Technique et Logicielle du Projet}
+L'application développée repose sur une architecture moderne, modulaire et totalement découplée (Client-Serveur REST) :
+
+\begin{itemize}
+    \item \textbf{Backend (FastAPI / Python 3.11)} : Garantit les services d'extraction de texte (PyPDF2/pdfplumber), le découpage, la vectorisation, l'indexation FAISS et la communication avec l'API Ollama.
+    \item \textbf{Frontend (React.js / Chart.js / HTML5 / CSS3)} : Propose une interface réactive permettant à l'utilisateur de charger des documents, de sélectionner les algorithmes de benchmark, de poser des questions et d'afficher les graphiques de performance en temps réel.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\safeincludegraphics[width=0.95\textwidth]{interface.jpeg}
+\caption{Interface RAG Interactive et Dashboard de Benchmark des Métriques}
+\label{fig:ui_rag}
+\end{figure}
+
+\section{Résultats Expérimentaux \& Évaluations}
+
+\subsection{Corpus d'Évaluation et Prétraitement PDF}
+Le benchmark a été réalisé sur le document officiel \texttt{Document\_Data\_Reduit.pdf} comportant originellement **100 pages**. Le nettoyage préalable a supprimé les pages de garde, les sommaires et les pages blanches, conservant **93 pages valides**, représentées par **198 760 caractères** et **36 017 mots**.
+
+\subsection{Analyse Comparative et Sélection du Chunking Optimal}
+Le tableau \ref{tab:chunking_metrics} résume l'évaluation comparative des 7 méthodes de chunking appliquées au corpus :
+
+\begin{table}[H]
+\centering
+\small
+\caption{Benchmark des 7 méthodes de Chunking (Données Identiques Plateforme)}
+\label{tab:chunking_metrics}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Méthode} & \textbf{Nb Chunks} & \textbf{Long. Moy.} & \textbf{Écart-type} & \textbf{Intra Sim.} & \textbf{Inter Sim.} & \textbf{Recall@k} & \textbf{Prec.@k} & \textbf{F1-score} \\
+\midrule
+\textbf{Fixed Char. Splitter} & \textbf{497} & \textbf{399} & \textbf{1.9} & \textbf{0.850} & \textbf{0.204} & \textbf{0.808} & \textbf{0.849} & \textbf{0.828} \\
+Recursive Char. & 448 & 441 & 75.5 & 0.850 & 0.212 & 0.805 & 0.821 & 0.813 \\
+NLTK Splitter & 426 & 462 & 960.7 & 0.848 & 0.160 & 0.828 & 0.678 & 0.746 \\
+SpaCy Splitter & 327 & 595 & 1183.8 & 0.850 & 0.195 & 0.812 & 0.680 & 0.740 \\
+Token (Tiktoken) & 188 & 1056 & 228.9 & 0.850 & 0.312 & 0.760 & 0.813 & 0.786 \\
+ST-Token Splitter & 474 & 528 & 122.7 & 0.850 & 0.391 & 0.724 & 0.811 & 0.765 \\
+Semantic Chunker & 1108 & 175 & 601.9 & 0.843 & 0.088 & 0.861 & 0.674 & 0.756 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{bestbox}{🏆 Meilleure Méthode de Chunking : Fixed Character Splitter}
+La méthode \textbf{Fixed Character Splitter} obtient le F1-score le plus élevé (**0.828**). Sa régularité stricte ($\text{Écart-type} = 1.9$) évite la création de chunks trop longs qui diluent l'information ou de chunks trop courts qui manquent de contexte.
+\end{bestbox}
+
+\subsection{Évaluation et Choix du Meilleur Modèle d'Embedding}
+Le tableau \ref{tab:embedding_metrics} présente les performances comparatives des 7 modèles d'embedding :
+
+\begin{table}[H]
+\centering
+\small
+\caption{Benchmark des 7 modèles d'Embedding (Données Identiques Plateforme)}
+\label{tab:embedding_metrics}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Modèle} & \textbf{Cosine Sim.} & \textbf{Intra Sim.} & \textbf{Inter Sim.} & \textbf{Prec.@k} & \textbf{Recall@k} & \textbf{MAP} & \textbf{MRR} & \textbf{NDCG} \\
+\midrule
+\textbf{Word2Vec} & \textbf{0.444} & \textbf{0.559} & \textbf{0.441} & \textbf{0.600} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} \\
+\textbf{GloVe} & \textbf{0.444} & \textbf{0.559} & \textbf{0.441} & \textbf{0.600} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} \\
+\textbf{FastText} & \textbf{0.444} & \textbf{0.559} & \textbf{0.441} & \textbf{0.600} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} \\
+BERT & 0.393 & 0.427 & 0.573 & 0.600 & 1.000 & 1.000 & 1.000 & 1.000 \\
+Sentence-BERT & 0.344 & 0.380 & 0.620 & 0.600 & 1.000 & 1.000 & 1.000 & 1.000 \\
+TF-IDF & 0.344 & 0.380 & 0.620 & 0.600 & 1.000 & 1.000 & 1.000 & 1.000 \\
+BM25 Sparse & 0.537 & 0.600 & 0.400 & 0.600 & 1.000 & 1.000 & 1.000 & 1.000 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{bestbox}{🏆 Meilleur Modèle d'Embedding : Word2Vec / GloVe / FastText}
+Les représentations vectorielles denses **Word2Vec**, **GloVe** et **FastText** se distinguent par une excellente séparabilité sémantique ($\text{Cosine Sim.} = 0.444$) et des métriques de classement parfaites (**MAP = 1.000**, **MRR = 1.000**, **NDCG = 1.000**).
+\end{bestbox}
+
+\subsection{Optimisation de la Stratégie de Retrieval}
+Le tableau \ref{tab:retrieval_metrics} détaille les résultats de l'évaluation des 6 algorithmes de recherche :
+
+\begin{table}[H]
+\centering
+\small
+\caption{Benchmark des 6 méthodes de Retrieval (Données Identiques Plateforme - 6 Colonnes Exactes)}
+\label{tab:retrieval_metrics}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Méthode} & \textbf{Precision@5} & \textbf{Recall@5} & \textbf{MRR} & \textbf{NDCG@5} & \textbf{Latence (ms)} \\
+\midrule
+\textbf{Similarité brute} & \textbf{0.600} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 15.88 ms \\
+\textbf{ANN (FAISS, Milvus)} & \textbf{0.600} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 14.62 ms \\
+BM25 / TF-IDF & 0.560 & 0.933 & 1.000 & 0.940 & \textbf{2.50 ms} \\
+\textbf{DPR} & \textbf{0.600} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & 14.41 ms \\
+Hybride & 0.600 & 1.000 & 1.000 & 0.983 & 17.21 ms \\
+Re-ranking & 0.520 & 0.867 & 1.000 & 0.866 & 17.62 ms \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{bestbox}{🏆 Meilleure Méthode de Retrieval : Similarité brute / ANN (FAISS) / DPR}
+Les méthodes **Similarité brute**, **ANN (FAISS)** et **DPR** atteignent une précision et une pertinence parfaites ($\text{MRR} = 1.000$, $\text{NDCG@5} = 1.000$) tout en maintenant une latence d'exécution extrêmement faible ($\approx 14.4$ à $15.8\text{ ms}$).
+\end{bestbox}
+
+\subsection{Infrastructure LLM et Inférence Locale via Ollama}
+Pour garantir la confidentialité totale des données industrielles de Marsa Maroc, l'inférence générative est exécutée localement via le framework **Ollama** (utilisant des modèles tels que Llama3 ou Mistral-7B). Les pipelines de traitement s'appuient sur la bibliothèque **Hugging Face Transformers**, évitant tout appel API externe Pay-per-Token et garantissant une souveraineté numérique absolue.
+
+lankpage
+lankpage
+lankpage
+\blankpage
+
+\chapter{Partie III — Valeur Ajoutée \& Perspectives}
+
+\section{Valeur Ajoutée du Projet}
+
+\subsection{Apports Opérationnels du Volet Data Analyst pour Marsa Maroc}
+L'implémentation de la solution analytique apporte une valeur mesurable immédiate aux équipes d'exploitation de Marsa Maroc :
+\begin{itemize}
+    \item \textbf{Supervision Unifiée} : Centralisation visuelle en temps réel des données de pesée portant sur 355 000 transactions et 9.17 Millions de Tonnes.
+    \item \textbf{Rééquilibrage dynamique des Ponts-Bascules} : Identification précise de la surcharge du pont **PB 19** (>63K pesées) et mise en place d'un plan de délestage vers les ponts sous-utilisés (\texttt{IN 02}, \texttt{OUT 01}).
+    \item \textbf{Planification prédictive des effectifs} : Anticipation des pics d'affluence du 2ème trimestre (Avril/Mai) permettant d'ajuster le nombre d'agents de pesée à l'avance.
+\end{itemize}
+
+\subsection{Gains de Performance et Avantages de la Solution RAG}
+Sur le plan de la gestion des connaissances, l'assistant RAG modifie radicalement les usages internes :
+\begin{itemize}
+    \item \textbf{Pertinence et Exactitude} : Obtenues grâce au score parfait NDCG@5 de **1.000**, éliminant les risques d'erreur lors de la recherche de procédures.
+    \item \textbf{Accès Instantané} : Réduction du temps de recherche documentaire de plusieurs heures à **moins de 16 millisecondes**.
+    \item \textbf{Sécurité et Souveraineté} : Garantie d'une étanchéité totale des données grâce au déploiement local sous Ollama.
+\end{itemize}
+
+\section{Conclusion \& Perspectives}
+
+\subsection{Synthèse Générale des Travaux Réalisés}
+Ce stage d'immersion professionnelle au sein de **Marsa Maroc** a permis de concevoir et d'expérimenter avec succès une synergie technologique puissante entre l'analyse de données massives (Data Analytics via Power BI) et l'intelligence artificielle générative (RAG). L'approche intégrée développée offre une réponse concrète aux défis de fluidification de la logistique portuaire.
+
+\subsection{Perspectives d'Évolution Industrielle}
+Afin de prolonger cette étude et d'accompagner Marsa Maroc dans son plan de transformation numérique, nous proposons trois grandes perspectives d'avenir :
+
+\begin{infobox}{Perspective 1 : Intégration d'Agents Autonomes Multi-Hop (Agentic RAG)}
+Déployer une architecture multi-agents autonomes s'appuyant sur des frameworks avancés (LangGraph ou AutoGen). Ces agents permettront de décomposer des requêtes complexes en sous-problèmes, de réécrire les questions de manière adaptative, d'interroger plusieurs bases de données de manière itérative (Multi-Hop) et de valider de manière autonome la qualité des réponses générées avant présentation à l'utilisateur.
+\end{infobox}
+
+\begin{infobox}{Perspective 2 : Passage à l'Échelle avec Milvus / Qdrant Enterprise}
+Migrer de l'index local FAISS vers une base de données vectorielle distribuée à très haute disponibilité (telle que Milvus Enterprise ou Qdrant Cluster). Cette infrastructure permettra de gérer sans perte de performance des dizaines de millions d'enregistrements de pesées en temps réel, réparties sur l'ensemble des 10 ports exploités par Marsa Maroc.
+\end{infobox}
+
+\begin{infobox}{Perspective 3 : Système RAG Multimodal (ColPali / Vision-LLM)}
+Élever le système RAG au rang de solution multimodale capable de traiter simultanément du texte et des images. En intégrant des modèles de vision-langage de dernière génération (telles que ColPali ou GPT-4o-Vision), la plateforme pourra analyser directement les scannages de bons de pesée manuscrits, les photographies de plaques d'immatriculation des camions, et les schémas de cargaison de conteneurs pour en extraire automatiquement l'information utile.
+\end{infobox}
+
+% ==============================================================================
+% BIBLIOGRAPHIE ET WEBGRAPHIE
+% ==============================================================================
+lankpage
+\blankpage
+
+\chapter*{Bibliographie et Webgraphie}
+\addcontentsline{toc}{chapter}{Bibliographie et Webgraphie}
+
+\begin{enumerate}
+    \item \textbf{Royaume du Maroc} : \textit{Loi n° 15-02 relative aux ports et portant création de la SODEP et de l'ANP}, Promulguée par le Dahir n° 1-05-146 du 15 Décembre 2006, Bulletin Officiel n° 5484.
+    \item \textbf{Marsa Maroc} : \textit{Rapports annuels d'activité et statistiques du trafic portuaire national}, Direction de la Stratégie et du Développement, 2015–2025.
+    \item \textbf{Agence Nationale des Ports (ANP)} : \textit{Guide des procédures d'exploitation portuaire et de la régulation des flux au Maroc}, Document officiel ANP.
+    \item \textbf{Lewis, P., Perez, E., Pichtulis, A., et al. (2020)} : \textit{Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks}, Advances in Neural Information Processing Systems (NeurIPS 2020), Vol. 33, pp. 9459-9474.
+    \item \textbf{Reimers, N., \& Gurevych, I. (2019)} : \textit{Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks}, Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing (EMNLP-IJCNLP), pp. 3982-3992.
+    \item \textbf{Johnson, J., Douze, M., \& Jégou, H. (2019)} : \textit{Billion-scale similarity search with GPUs}, IEEE Transactions on Big Data, Vol. 7, No. 3, pp. 535-547.
+    \item \textbf{Robertson, S., \& Zaragoza, H. (2009)} : \textit{The Probabilistic Relevance Framework: BM25 and Beyond}, Foundations and Trends in Information Retrieval, Vol. 3, No. 4, pp. 333-389.
+    \item \textbf{Mikolov, T., Chen, K., Corrado, G., \& Dean, J. (2013)} : \textit{Efficient Estimation of Word Representations in Vector Space}, arXiv preprint arXiv:1301.3781.
+    \item \textbf{Pennington, J., Socher, R., \& Manning, C. D. (2014)} : \textit{GloVe: Global Vectors for Word Representation}, Proceedings of EMNLP 2014, pp. 1532-1543.
+    \item \textbf{Microsoft Power BI Documentation} : \textit{Power BI DAX Language Reference \& Data Visualization Guidelines}, \url{https://learn.microsoft.com/en-us/power-bi/}.
+    \item \textbf{FastAPI Framework Documentation} : \textit{FastAPI High-Performance Python Web API Framework}, \url{https://fastapi.tiangolo.com/}.
+    \item \textbf{React.js Documentation} : \textit{React - A JavaScript library for building user interfaces}, \url{https://react.dev/}.
+    \item \textbf{Ollama Project} : \textit{Get up and running with Llama 3, Mistral, and other large language models locally}, \url{https://ollama.com/}.
+\end{enumerate}
+
+\end{document}

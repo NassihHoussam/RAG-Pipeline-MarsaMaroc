@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Architecture & Benchmark Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for Metrics Dashboards -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation (Bleu Foncé) -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon"><i class="fa-solid fa-brain"></i></div>
+                <div class="brand-text">
+                    <h2>RAG System</h2>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="workflow-tab">
+                    <i class="fa-solid fa-diagram-project"></i> Workflow RAG
+                </button>
+                <button class="nav-item" data-tab="query-tab">
+                    <i class="fa-solid fa-paper-plane"></i> Query & Génération
+                </button>
+                <button class="nav-item" data-tab="chunking-tab">
+                    <i class="fa-solid fa-scissors"></i> Chunking (7 Méthodes)
+                </button>
+                <button class="nav-item" data-tab="embedding-tab">
+                    <i class="fa-solid fa-vector-square"></i> Embeddings (7 Modèles)
+                </button>
+                <button class="nav-item" data-tab="retrieval-tab">
+                    <i class="fa-solid fa-chart-column"></i> Retrieval (6 Méthodes)
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="doc-badge">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <div class="doc-info">
+                        <span class="doc-title" id="pdf-title">Document_Data_Reduit.pdf</span>
+                        <span class="doc-meta" id="pdf-pages">100 pages • Paleoceanography</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h1 id="page-title">Pipeline RAG & Dashboard d'Évaluation des Métriques</h1>
+                </div>
+                <div class="header-status">
+                    <span class="status-indicator online"></span>
+                    <span id="backend-status">FastAPI REST Server : Connecté</span>
+                </div>
+            </header>
+
+            <!-- TAB 1: WORKFLOW RAG DIAGRAM -->
+            <section id="workflow-tab" class="tab-content active">
+                <div class="workflow-header-card">
+                    <h2><i class="fa-solid fa-network-wired"></i> Architecture Globale du Pipeline RAG</h2>
+                    <p>Déroulement séquentiel : 7 Méthodes de Chunking ➔ 7 Modèles d'Embedding ➔ 6 Méthodes de Retrieval ➔ Query.</p>
+                </div>
+
+                <div class="workflow-diagram-container">
+                    <div class="workflow-step-box">
+                        <div class="step-header">
+                            <span class="step-num">1</span>
+                            <h3>Chunking (7 Méthodes)</h3>
+                        </div>
+                        <p>Fixed, Recursive, NLTK, SpaCy, Tiktoken, ST-Token, Semantic</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="switchTab('chunking-tab')">
+                                <i class="fa-solid fa-scissors"></i> Tester Chunking
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="workflow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                    <div class="workflow-step-box">
+                        <div class="step-header">
+                            <span class="step-num">2</span>
+                            <h3>Embedding (7 Modèles)</h3>
+                        </div>
+                        <p>Word2Vec, GloVe, FastText, BERT, Sentence-BERT, TF-IDF, BM25</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="switchTab('embedding-tab')">
+                                <i class="fa-solid fa-chart-line"></i> Métriques Embeddings
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="workflow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                    <div class="workflow-step-box highlighted">
+                        <div class="step-header">
+                            <span class="step-num">3</span>
+                            <h3>Retrieval (6 Méthodes)</h3>
+                        </div>
+                        <p>Brute, ANN (FAISS/Milvus), BM25, DPR, Hybride, Re-ranking</p>
+                        <div class="button-group">
+                            <button class="btn btn-accent" onclick="switchTab('retrieval-tab')">
+                                <i class="fa-solid fa-chart-bar"></i> Dashboard Metrics
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="workflow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                    <div class="workflow-step-box">
+                        <div class="step-header">
+                            <span class="step-num">4</span>
+                            <h3>Query</h3>
+                        </div>
+                        <p>Synthèse basée sur les documents extraits</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="switchTab('query-tab')">
+                                <i class="fa-solid fa-comment-dots"></i> Bouton Query
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon blue"><i class="fa-solid fa-cubes"></i></div>
+                        <div class="metric-body">
+                            <h4 id="stat-chunks">--</h4>
+                            <p>Total Chunks Indexés</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon purple"><i class="fa-solid fa-ruler-combined"></i></div>
+                        <div class="metric-body">
+                            <h4 id="stat-dim">--</h4>
+                            <p>Dimension Vectorielle</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon green"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="metric-body">
+                            <h4 id="stat-best-mrr">--</h4>
+                            <p>Top MRR (Re-Ranking)</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon orange"><i class="fa-solid fa-bullseye"></i></div>
+                        <div class="metric-body">
+                            <h4 id="stat-ndcg">--</h4>
+                            <p>Score Global NDCG@5</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: QUERY & GENERATION -->
+            <section id="query-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-magnifying-glass"></i> Interface de Requête RAG (Bouton Query)</h2>
+                        <span class="badge badge-api">POST /query</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="query-controls">
+                            <div class="input-group">
+                                <label for="user-query"><i class="fa-solid fa-circle-question"></i> Saisissez votre question :</label>
+                                <input type="text" id="user-query" placeholder="ex: Quels sont les assemblages de diatomées et foraminifères dans le Pacifique ?" value="Quels sont les assemblages de diatomées dans le Sud-Est Pacifique ?">
+                            </div>
+
+                            <div class="control-row">
+                                <div class="select-group">
+                                    <label for="retrieval-method-select"><i class="fa-solid fa-filter"></i> Méthode de Retrieval :</label>
+                                    <select id="retrieval-method-select">
+                                        <option value="Hybride" selected>1. Hybride (Combinaison BM25 + Vecteurs)</option>
+                                        <option value="Re-ranking">2. Re-ranking (Résultats très précis)</option>
+                                        <option value="DPR">3. DPR (Dense Passage Retrieval)</option>
+                                        <option value="Similarité brute">4. Similarité brute (Cosine exact)</option>
+                                        <option value="ANN (FAISS, Milvus)">5. ANN (FAISS / Milvus)</option>
+                                        <option value="BM25 / TF-IDF">6. BM25 / TF-IDF (Recherche Lexicale)</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary btn-lg" id="btn-run-query">
+                                    <i class="fa-solid fa-paper-plane"></i> Bouton Query
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="query-results-full">
+                    <div class="card response-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-robot"></i> Réponse Générée basée sur les documents</h3>
+                            <span class="badge badge-success" id="confidence-badge">Score: --</span>
+                        </div>
+                        <div class="card-body">
+                            <div id="response-output" class="markdown-preview">
+                                <em>Cliquez sur le <strong>Bouton Query</strong> pour exécuter la recherche RAG et générer une réponse contextuelle.</em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: CHUNKING & METRICS -->
+            <section id="chunking-tab" class="tab-content">
+                <!-- Best Chunking Method Banner -->
+                <div class="workflow-header-card" style="background: linear-gradient(135deg, #047857, #10b981); margin-bottom: 1.2rem;">
+                    <h2><i class="fa-solid fa-trophy"></i> Meilleure Méthode de Chunking Détectée : <span id="best-chunk-method">Recursive Character Splitter</span></h2>
+                    <p>Sélectionnée automatiquement selon le meilleur score F1-score et équilibre de cohérence sémantique.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-scissors"></i> Analyse Comparative des 7 Méthodes de Chunking</h2>
+                        <span class="badge badge-api">POST /chunking & GET /chunking/metrics</span>
+                    </div>
+                    <div class="card-body">
+                        <p>Sélectionnez l'une des 7 méthodes pour découper le document et visualiser les 8 métriques évaluées :</p>
+                        
+                        <div class="chunking-buttons">
+                            <button class="btn btn-chunk" data-method="fixed_character">
+                                <i class="fa-solid fa-ruler"></i> 1. Fixed Character
+                            </button>
+                            <button class="btn btn-chunk active" data-method="recursive_character">
+                                <i class="fa-solid fa-sitemap"></i> 2. Recursive Character
+                            </button>
+                            <button class="btn btn-chunk" data-method="nltk_splitter">
+                                <i class="fa-solid fa-paragraph"></i> 3. NLTK Splitter
+                            </button>
+                            <button class="btn btn-chunk" data-method="spacy_splitter">
+                                <i class="fa-solid fa-code-branch"></i> 4. SpaCy Splitter
+                            </button>
+                            <button class="btn btn-chunk" data-method="tiktoken_splitter">
+                                <i class="fa-solid fa-coins"></i> 5. Token (Tiktoken)
+                            </button>
+                            <button class="btn btn-chunk" data-method="sentence_transformers_token_splitter">
+                                <i class="fa-solid fa-layer-group"></i> 6. ST-Token Splitter
+                            </button>
+                            <button class="btn btn-chunk" data-method="semantic_chunker">
+                                <i class="fa-solid fa-brain"></i> 7. Semantic Chunker
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chunking Dedicated Charts -->
+                <div class="dashboard-grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-chart-line"></i> Graphique 1 : Qualité Sémantique (Intra, Inter, F1-score)</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="chunkingCoherenceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-chart-column"></i> Graphique 2 : Fragmentation & Homogénéité (Chunks, Taille, Écart-type)</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="chunkingSizeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chunking Metrics Table -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-table"></i> Tableau Synthétique des 8 Métriques de Chunking</h3>
+                        <button class="btn btn-sm btn-secondary" id="btn-refresh-chunk-metrics"><i class="fa-solid fa-rotate"></i> Actualiser</button>
+                    </div>
+                    <div class="card-body">
+                        <table class="data-table" id="chunk-metrics-table">
+                            <thead>
+                                <tr>
+                                    <th>Méthode</th>
+                                    <th>Nb Chunks (Fragmentation)</th>
+                                    <th>Long. Moy. (Taille Opt.)</th>
+                                    <th>Écart-type (Homogénéité)</th>
+                                    <th>Intra Sim. (Cohérence)</th>
+                                    <th>Inter Sim. (Redondance)</th>
+                                    <th>Recall@k (Couverture)</th>
+                                    <th>Precision@k (Pertinence)</th>
+                                    <th>F1-score (Performance)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="9" class="text-center">Chargement des métriques...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Chunks Sample Preview -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-eye"></i> Aperçu des Chunks Générés (<span id="chunk-method-title">Recursive Character</span>)</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="chunks-preview-container" class="chunks-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: EMBEDDING & METRICS -->
+            <section id="embedding-tab" class="tab-content">
+                <!-- Best Embedding Method Banner -->
+                <div class="workflow-header-card" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); margin-bottom: 1.2rem;">
+                    <h2><i class="fa-solid fa-award"></i> Meilleure Méthode d'Embedding Détectée : <span id="best-emb-method">Sentence-BERT</span></h2>
+                    <p>Sélectionnée automatiquement selon le meilleur score NDCG et la qualité globale de classement sémantique.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-vector-square"></i> Évaluation Comparative des 7 Méthodes d'Embedding</h2>
+                        <span class="badge badge-api">GET /embedding/metrics</span>
+                    </div>
+                    <div class="card-body">
+                        <p>Analyse comparative des 7 représentations vectorielles : <strong>Word2Vec</strong>, <strong>GloVe</strong>, <strong>FastText</strong>, <strong>BERT</strong>, <strong>Sentence-BERT</strong>, <strong>TF-IDF</strong>, et <strong>BM25 Sparse</strong>.</p>
+                        
+                        <div class="action-bar">
+                            <button class="btn btn-primary" id="btn-refresh-emb-metrics">
+                                <i class="fa-solid fa-rotate"></i> Recharger le Benchmark Embeddings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-chart-column"></i> Graphique 3 : Performances Comparées des 7 Modèles d'Embedding</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="embeddingComparisonChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-list-check"></i> Tableau Synthétique des 8 Métriques d'Embedding</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="data-table" id="embedding-metrics-table">
+                            <thead>
+                                <tr>
+                                    <th>Modèle Embedding</th>
+                                    <th>Cosine Sim. (Similarité)</th>
+                                    <th>Intra Sim. (Cohérence)</th>
+                                    <th>Inter Sim. (Séparation)</th>
+                                    <th>Precision@k (Qualité)</th>
+                                    <th>Recall@k (Couverture)</th>
+                                    <th>MAP (Perf. Globale)</th>
+                                    <th>MRR (Position)</th>
+                                    <th>NDCG (Rank)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="9" class="text-center">Chargement des métriques d'embedding...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: RETRIEVAL DASHBOARD (6 Méthodes TP2) -->
+            <section id="retrieval-tab" class="tab-content">
+                <!-- Best Retrieval Method Banner -->
+                <div class="workflow-header-card" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6); margin-bottom: 1.2rem;">
+                    <h2><i class="fa-solid fa-star"></i> Meilleure Méthode de Retrieval Détectée : <span id="best-retrieval-method">Re-ranking</span></h2>
+                    <p>Sélectionnée automatiquement selon le meilleur score MRR et NDCG@5.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-line"></i> Dashboard des Métriques de Retrieval (6 Méthodes)</h2>
+                        <span class="badge badge-api">GET /retrieval/metrics</span>
+                    </div>
+                    <div class="card-body">
+                        <p>Évaluation des 6 méthodes de retrieval : <strong>Similarité brute</strong>, <strong>ANN (FAISS, Milvus)</strong>, <strong>BM25 / TF-IDF</strong>, <strong>DPR</strong>, <strong>Hybride</strong>, et <strong>Re-ranking</strong>.</p>
+                        
+                        <div class="action-bar">
+                            <button class="btn btn-primary" id="btn-run-retrieval-eval">
+                                <i class="fa-solid fa-play"></i> Lancer le Benchmark des 6 Méthodes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid-2 mt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-chart-column"></i> Graphique 4 : Metric Histogram across 6 Retrieval Methods</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="retrievalChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-list-check"></i> Tableau Comparatif des 8 Métriques de Retrieval</h3>
+                        </div>
+                        <div class="card-body">
+                            <table class="data-table" id="retrieval-metrics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Méthode</th>
+                                        <th>Precision@5</th>
+                                        <th>Recall@5</th>
+                                        <th>MRR</th>
+                                        <th>NDCG@5</th>
+                                        <th>Latence (ms)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="6" class="text-center">Cliquez sur "Lancer le Benchmark" pour calculer les métriques...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="static/app.js"></script>
+</body>
+</html>
